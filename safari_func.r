@@ -26,8 +26,11 @@ dataset$observer <- ""
 
 # we need to separate by days of prospect
 
-soil$day = ""
+
 getday <- function(dataset){
+
+soil$day = ""
+
 	for (i in 1:length(soil$observed_on_string)) {
 	  if (grepl("2023-04-17", soil$observed_on_string[i], ignore.case = TRUE)) {
 	    soil$day[i] <- "day1"
