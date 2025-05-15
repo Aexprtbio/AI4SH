@@ -21,3 +21,27 @@ dataset$observer <- ""
 	  }
 	}
 }
+
+
+
+# we need to separate by days of prospect
+
+soil$day = ""
+getday <- function(dataset){
+	for (i in 1:length(soil$observed_on_string)) {
+	  if (grepl("2023-04-17", soil$observed_on_string[i], ignore.case = TRUE)) {
+	    soil$day[i] <- "day1"
+	  } else if (grepl("2023-04-18", soil$observed_on_string[i], ignore.case = TRUE)) {
+	    soil$day[i] <- "day2"
+	  } else if (grepl("2023-04-20", soil$observed_on_string[i], ignore.case = TRUE)) {
+	    soil$day[i] <- "day3"
+	  } else if (grepl("2023-04-30", soil$observed_on_string[i], ignore.case = TRUE)) {
+	    soil$day[i] <- "out"
+	  } else {
+	    soil$day[i] <- "day4"
+	  }
+	}
+
+soil <- subset(soil, soil$day != "out")
+
+}
