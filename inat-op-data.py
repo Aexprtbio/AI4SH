@@ -91,6 +91,8 @@ project_id=156800 # trying with eristalis cryptarum (only 115 obs on inat)
 soil=getobs_bytax(project_id)
 
 soil[["latitude", "longitude"]] = soil["location"].str.split(',', expand=True)
+soil["session"]='NA'
+soil.to_csv('/Users/alexpretat/Documents/soil.csv')
 
 ####---------------------------------------------------------------------------------------
 #### GET BY USER (ME) to fetch observations of Laurence and Jérôme
@@ -132,9 +134,9 @@ print('\n -------------------------------')
 user_id=8003020 # my username
 obs=getobs_us(user_id)
 obs[["latitude", "longitude"]] = obs["location"].str.split(',', expand=True)
-
+obs['session']=obs['description']
 # is good and saved
-
+obs.to_csv('/Users/alexpretat/Documents/alex.csv')
 
 ####---------------------------------------------------------------------------------------
 #### NOW TO LAUNCH R SCRIPT TO TAKE IT FROM HERE

@@ -18,13 +18,16 @@ setwd('/Users/alexpretat/Documents')
 soil <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 laur <- read.csv2('alex.csv', h=TRUE, sep = ',', stringsAsFactor =TRUE)
 
-summary(laur)
-summary(soil)
+colnames(laur)
+colnames(soil)
 
 soil <- rbind(soil, laur)
 
 
-soil <- subset(soil, grepl('^2023-04', time_observed_at))
+soil1 <- subset(soil, grepl('^2023-04', time_observed_at))
+soil2 <- subset(soil, grepl('alex', description))
+
+soil <- rbind(soil1, soil2)
 soil$observed_on_string <- ymd_hms(soil$time_observed_at)
 soil$time <- as_hms(soil$observed_on_string)
 soil$hour <- hour(soil$time)
@@ -54,6 +57,8 @@ for (i in 1:length(soil$user)) {
     soil$observer[i] <- "Dacar"
   } else if (grepl("Jerome", soil$description[i], ignore.case = TRUE)) {
     soil$observer[i] <- "Jerome"
+  } else if (grepl("alex", soil$description[i], ignore.case = TRUE)) {
+    soil$observer[i] <- "Alex"
   } else {
     soil$observer[i] <- "Laurence"
   }
@@ -75,6 +80,8 @@ for (i in 1:length(soil$observed_on_string)) {
     soil$day[i] <- "day3"
   } else if (grepl("2023-04-30", soil$observed_on_string[i], ignore.case = TRUE)) {
     soil$day[i] <- "out"
+  } else {
+    soil$day[i] <- "day4"
   }
 }
 
@@ -110,7 +117,7 @@ soil <- soil %>%
 library(ggplot2)
 
 ggplot(soil, aes(x = time, y = cum_indiv, color = observer)) +
-  geom_line(size = 1.2) +
+  geom_line(linewidth = 1.2) +
   facet_wrap(~ day) +
   labs(
     title = "Courbe d'accumulation de la biodiversité",
