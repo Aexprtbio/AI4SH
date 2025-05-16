@@ -15,21 +15,23 @@ setwd('/Users/alexpretat/Documents')
 
 # import dataset and process the first time
 
-#soil <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
-#laur <- read.csv2('alex.csv', h=TRUE, sep = ',', stringsAsFactor =TRUE)
+soil <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
+laur <- read.csv2('alex.csv', h=TRUE, sep = ',', stringsAsFactor =TRUE)
 
-#colnames(laur)
-#colnames(soil)
+colnames(laur)
+colnames(soil)
 
-#soil <- rbind(soil, laur)
+soil$observed_on_string <- ymd_hms(soil$time_observed_at)
+laur$observed_on_string<-ymd_hms(laur$time_observed_at)
+soil <- rbind(soil, laur)
 
 
-#soil1 <- subset(soil, grepl('^2023-04', time_observed_at))
-#soil2 <- subset(soil, grepl('alex', description))
+soil1 <- subset(soil, grepl('^2023-04', time_observed_at))
+soil2 <- subset(soil, grepl('^2025-05', time_observed_at))
 
 #soil <- rbind(soil1, soil2)
 
-#write.csv2(soil, '/Users/alexpretat/Documents/soilsforqgis.csv')
+write.csv2(soil, '/Users/alexpretat/Documents/soilsforqgis.csv')
 
 
 
@@ -37,11 +39,14 @@ setwd('/Users/alexpretat/Documents')
 # Now import the version with CORINE LC
 
 setwd('/Users/alexpretat/AI4SH')
+source('safari_func.r')
 
-soil <- read.csv2('soil_lu.csv', h = TRUE, sep = ',', stringsAsFactor = FALSE)
+# soil <- read.csv2('soil_lu.csv', h = TRUE, sep = ',', stringsAsFactor = FALSE)
+
+soil <- getuser(soil)
+soil <- getday(soil)
 
 soil$session<-as.factor(soil$session)
-soil$observed_on_string <- ymd_hms(soil$time_observed_at)
 soil$time <- as_hms(soil$observed_on_string)
 soil$hour <- hour(soil$time)
 soil$hour <- as.factor(soil$hour)
@@ -93,7 +98,7 @@ soil <- soil %>%
 library(ggplot2)
 
 ggplot(soil, aes(x = time, y = cum_indiv, color = observer)) +
-  geom_smooth(linewidth = 1.2) +
+  geom_line(linewidth = 1.2) +
   facet_wrap(~ milieux) +
   labs(
     title = "Courbe d'accumulation de la biodiversité",

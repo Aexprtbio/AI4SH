@@ -1,7 +1,7 @@
 ### CREATED BY ALEXI PRETAT
 # 1/04/2025
 
-# LAST UPDATE : 1/04/2025
+# LAST UPDATE : 10/05/2025
 
 # open shell in panel
 # source AlexPI/bin/activate
