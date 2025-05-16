@@ -27,7 +27,7 @@ soil <- rbind(soil, laur)
 
 
 soil1 <- subset(soil, grepl('^2023-04', time_observed_at))
-soil2 <- subset(soil, grepl('^2025-05', time_observed_at))
+soil2 <- subset(soil, grepl('2025-05', time_observed_at))
 
 #soil <- rbind(soil1, soil2)
 
@@ -97,7 +97,7 @@ soil <- soil %>%
 
 library(ggplot2)
 
-ggplot(soil, aes(x = time, y = cum_indiv, color = observer)) +
+ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ milieux) +
   labs(
