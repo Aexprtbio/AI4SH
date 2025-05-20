@@ -12,7 +12,8 @@ getuser <- function(dataset) {
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
         grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
         grepl("Jerome", session, ignore.case = TRUE) ~ "Jerome",
-        grepl("alex", session, ignore.case = TRUE) ~ "Alex",
+        grepl("alex", description, ignore.case = TRUE) ~ "Alex",
+        grepl("2025-05", observed_on_string, ignore.case = TRUE) ~ "Alex",
         TRUE ~ "Laurence"
       )
     )
@@ -42,6 +43,8 @@ soil$day = ""
 	    soil$day[i] <- "day4"
 	  } else if (grepl("2025-05-16", soil$observed_on_string[i], ignore.case = TRUE)) {
 	    soil$day[i] <- "day5"
+	  } else if (grepl("2025-05-17", soil$observed_on_string[i], ignore.case = TRUE)) {
+	    soil$day[i] <- "day6"
 	  } else {
 	  	soil$day[i] <- "out"
 	  }

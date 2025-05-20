@@ -46,7 +46,7 @@ source('safari_func.r')
 soil <- getuser(soil)
 soil <- getday(soil)
 
-soil$session<-as.factor(soil$session)
+soil$session<-as_ymd(soil$observed_on_string)
 soil$time <- as_hms(soil$observed_on_string)
 soil$hour <- hour(soil$time)
 soil$hour <- as.factor(soil$hour)
@@ -97,7 +97,7 @@ soil <- soil %>%
 
 library(ggplot2)
 
-ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer)) +
+ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer, group = description)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ milieux) +
   labs(
@@ -124,15 +124,15 @@ soil_long$type <- as.factor(soil_long$type)
 
 library(ggplot2)
 
-ggplot(soil_long, aes(x = time, y = cumulative_count, color = observer, group = type)) +
-  geom_point(size = 1, aes(shape=type)) +
-  facet_wrap(~ day) +
+ggplot(soil_long, aes(x = time, y = cumulative_count, color = day, group = description)) +
+  geom_line(size = 1) +
+  facet_wrap(~ observer) +
   labs(
-    title = "Accumulation de la biodiversité",
-    subtitle = "Comparaison entre nombre d'individus et richesse taxonomique",
+    title = "Accumulation of biodiversity",
+    subtitle = "Number of found individuals per taxa over time",
     x = "Heure",
     y = "Valeur cumulée",
-    color = "Observateur",
+    color = "Day of sessions",
     linetype = "Type de mesure"
   ) +
   theme_minimal()
