@@ -15,7 +15,8 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 # import dataset and process the first time
 
-soil <- read.csv2('merged_dataxa.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
+soil <- read.csv2('merged_dataxa.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
+soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
 colnames(soil)
 
@@ -49,7 +50,7 @@ plot(soil$time~soil$observed_on_string) ## cool
 class(soil$user)
 
 
-boxplot(soil$time~soil$observer)
+boxplot(soil$time~soil$day)
 
 
 
@@ -88,6 +89,8 @@ ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = milieux, group = descripti
   theme_minimal()
 
 
+
+
 ##################################################################################
 # TEST PIVOT LONGER to have taxa and number cum
 
@@ -104,7 +107,7 @@ soil_long$type <- as.factor(soil_long$type)
 
 library(ggplot2)
 
-ggplot(soil_long, aes(x = time, y = cumulative_count, color = day, group = description)) +
+ggplot(soil_long, aes(x = time, y = cumulative_count, color = transect_id, group = transect_id)) +
   geom_line() +
   facet_wrap(~ observer) +
   labs(

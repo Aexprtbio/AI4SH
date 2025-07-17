@@ -11,7 +11,7 @@ getuser <- function(dataset) {
         grepl("erick", user, ignore.case = TRUE) ~ "Eric",
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
         grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
-        grepl("Jerome", session, ignore.case = TRUE) ~ "Jerome",
+        grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
         grepl("alex", description, ignore.case = TRUE) ~ "Alex",
         grepl("2025-05", observed_on_string, ignore.case = TRUE) ~ "Alex",
         TRUE ~ "Laurence"
@@ -52,4 +52,13 @@ soil$day = ""
 
 soil <- subset(soil, soil$day != "out")
 
+}
+
+
+# now we create a func to auto-assignate Tribes with GSMF taxa groups
+
+gettaxa <- function(dataset){
+	dataset <- dataset %>%
+		mutate(
+			)
 }
