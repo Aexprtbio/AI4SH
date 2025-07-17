@@ -105,7 +105,7 @@ soil_long$type <- as.factor(soil_long$type)
 library(ggplot2)
 
 ggplot(soil_long, aes(x = time, y = cumulative_count, color = day, group = description)) +
-  geom_line(size = 1) +
+  geom_line() +
   facet_wrap(~ observer) +
   labs(
     title = "Accumulation of biodiversity",
