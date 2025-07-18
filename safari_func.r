@@ -57,8 +57,41 @@ soil <- subset(soil, soil$day != "out")
 
 # now we create a func to auto-assignate Tribes with GSMF taxa groups
 
+# correspondances
+
+# 47118 = Araneae
+# 48147 = Isopoda
+# 47208 = Coleoptera
+# 49470 = Collembola
+# 1269340 = Ants
+# 61267 = Heteroptera
+# 47735 = Diplopoda
+# 49556 = Chilopoda
+# 62164 = Trichoptera
+# 47114 = Gastropoda
+# 47651 = Orthoptera
+# 1418362 = Lumbricina
+# 81769 = Blattodea
+
 gettaxa <- function(dataset){
 	dataset <- dataset %>%
 		mutate(
+			taxa = case_when(
+				grepl("47118", ident_taxon_ids, ignore.case=TRUE) ~ 'd_araneae',
+				grepl("48147", ident_taxon_ids, ignore.case=TRUE) ~ 'd_isopoda',
+				grepl("47208", ident_taxon_ids, ignore.case=TRUE) ~ 'd_coleoptera',
+				grepl("49470", ident_taxon_ids, ignore.case=TRUE) ~ 'd_collembola',
+				grepl("1269340", ident_taxon_ids, ignore.case=TRUE) ~ 'd_ants',
+				grepl("61267", ident_taxon_ids, ignore.case=TRUE) ~ 'd_heteroptera',
+				grepl("47735", ident_taxon_ids, ignore.case=TRUE) ~ 'd_diplopoda',
+				grepl("49556", ident_taxon_ids, ignore.case=TRUE) ~ 'd_chilopoda',
+				grepl("62164", ident_taxon_ids, ignore.case=TRUE) ~ 'd_trichoptera',
+				grepl("47114", ident_taxon_ids, ignore.case=TRUE) ~ 'd_gastropoda',
+				grepl("47651", ident_taxon_ids, ignore.case=TRUE) ~ 'd_orthoptera',
+				grepl("1418362", ident_taxon_ids, ignore.case=TRUE) ~ 'd_earthworms',
+				grepl("81769", ident_taxon_ids, ignore.case=TRUE) ~ 'd_blattodea',
+				grepl("52788", ident_taxon_ids, ignore.case=TRUE) ~ 'd_acari',
+
+				)
 			)
 }
