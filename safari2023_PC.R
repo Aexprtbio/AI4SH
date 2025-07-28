@@ -147,7 +147,7 @@ commu <- table(soil$transect_id, soil$ident_taxon_ids)
 rarecurve(commu, step=1)
 
 tab2025 <- subset(soil, soil$observer=='Alex')
-commu2 <- table(tab2025$milieux, tab2025$ident_taxon_ids)
+commu2 <- table(tab2025$transect_id, tab2025$ident_taxon_ids)
 rarecurve(commu2, step=1)
 
 
