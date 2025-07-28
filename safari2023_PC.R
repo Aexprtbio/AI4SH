@@ -77,13 +77,16 @@ for (i in 1:length(soil$description)) {
     } else if (grepl("forest", soil$description[i], ignore.case = TRUE)) {
       soil$milieux[i] <- "forest"
     }
+    else {
+      soil$milieux[i] <- "forest"
+    }
   }
 
 ##################################################################################
 #taxa as seen on inaturalist
 soil <- soil %>%
   arrange(observed_on_string, observer, milieux, transect_id) %>%
-  group_by(observer, hour, milieux) %>%
+  group_by(observer, hour, milieux, transect_id) %>%
   mutate(obs_id = row_number()) %>%
   mutate(cum_taxa_true = sapply(1:n(), function(i) n_distinct(ident_taxon_ids[1:i])),
          cum_indiv = 1:n())
@@ -91,7 +94,7 @@ soil <- soil %>%
 # taxa as proposed on GSMF dataset
 soil <- soil %>%
   arrange(observed_on_string, observer, milieux, transect_id) %>%
-  group_by(observer, hour, milieux) %>%
+  group_by(observer, hour, milieux, transect_id) %>%
   mutate(obs_id = row_number()) %>%
   mutate(cum_taxa = sapply(1:n(), function(i) n_distinct(taxa[1:i])),
          cum_indiv = 1:n())
@@ -100,7 +103,7 @@ soil <- soil %>%
 # plots :)
 library(ggplot2)
 
-ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = milieux, group = description)) +
+ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer, group = description)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ transect_id) +
   labs(
@@ -126,54 +129,60 @@ ggplot(soil, aes(x = time, y = cum_taxa, color = milieux, group = transect_id)) 
 ##################################################################################
 # RARE CURVE WITH VEGAN
 
-data <- as.data.frame(soil[,c(71,82)])
+# ON GSMF TAXA
+# need to make a count of taxa per transect id for community matrix
+commu <- table(soil$transect_id, soil$taxa)
 
-commu<-data %>% 
-pivot_longer(cols = c(transect_id, taxa),
-  names_to='transect_id',
-  taxas_to='taxa')
-
-
-rarecurve(data, step=1)
-min(rowSums(data))
-##################################################################################
-# TEST PIVOT LONGER to have taxa and number cum
-
-library(tidyr)
-
-soil_long <- soil %>%
-  pivot_longer(cols = c(cum_indiv, cum_taxa),
-               names_to = "type",
-               taxas_to = "cumulative_count")
-
-soil_long$type <- as.factor(soil_long$type)
+rarecurve(commu, step=1)
 
 
+# rarecurve per habitat
+tab2025 <- subset(soil, soil$observer=='Alex')
+commu2 <- table(tab2025$milieux, tab2025$taxa)
+rarecurve(commu2, step=1)
 
-library(ggplot2)
+# ON INAT TAXA
+commu <- table(soil$transect_id, soil$ident_taxon_ids)
 
-ggplot(soil_long, aes(x = time, y = cumulative_count, color = transect_id, group = transect_id)) +
-  geom_line() +
-  facet_wrap(~ observer) +
-  labs(
-    title = "Accumulation of biodiversity",
-    subtitle = "Number of found individuals per taxa over time",
-    x = "Heure",
-    y = "Valeur cumulée",
-    color = "Day of sessions",
-    linetype = "Type de mesure"
-  ) +
-  theme_minimal()
+rarecurve(commu, step=1)
+
+tab2025 <- subset(soil, soil$observer=='Alex')
+commu2 <- table(tab2025$milieux, tab2025$ident_taxon_ids)
+rarecurve(commu2, step=1)
+
+
 
 
 ##################################################################################
 # Let's get interesting
 
-#  vegan package example
-data(BCI)
-SAC <- specaccum(BCI, "random")
-plot(SAC, ci.type = "poly", lwd = 2, ci.lty = 0, ci.col = "lightgray")
+#  work on ACP now
+library(FactoMineR)
+library(factoextra)
 
+AFC <- CA(commu) # on transects
+summary(AFC)
+
+# représentations
+barplot(AFC$eig[,2])
+transects <- plot(AFC, invisible='col', title='RP des transects')
+taxa <- plot(AFC, invisible='row', title='RP des taxa')
+
+dim12 <- plot(AFC, axes=c(1,2))
+dim23 <- plot(AFC, axes=c(2,3))
+dim13 <- plot(AFC, axes=c(1,3))
+dim34 <- plot(AFC, axes=c(3,4))
+dim24 <- plot(AFC, axes=c(2,4))
+
+dim12
+dim13
+dim23
+dim24
+dim34
+
+#####################################
+AFC2 <- CA(commu2) #on habitats
+summary(AFC2)
 
 
 
