@@ -35,21 +35,21 @@ soil <- getuser(soil)
 #soil <- getday(soil)
 soil <- gettaxa(soil)
 
-# work day time part process
+# work day time part process ----------------------------------------------------
 soil$time <- as_hms(soil$observed_on_string)
 soil$hour <- hour(soil$time)
 soil$day <- day(soil$observed_on_string)
 soil$month <- month(soil$observed_on_string)
 soil$year <- year(soil$observed_on_string)
 
-# convert to factor
+# convert to factor -------------------------------------------------------------
 soil$day <- as.factor(soil$day)
 soil$month <- as.factor(soil$month)
 soil$year <- as.factor(soil$year)
 soil$hour <- as.factor(soil$hour
 
 
-# try plots
+# try plots ----------------------------------------------------------------------
 boxplot(soil$time~soil$month) ## cool
 
 #lets rewwork the DF
@@ -66,6 +66,10 @@ soil$ident_taxon_ids
 
 boxplot(soil$time~soil$observer)
 
+# and remove outliers / non-macrofauna ------------------------------------------
+
+soil <- subset(soil, soil$taxa != ('d_acari'))
+soil <- subset(soil, soil$taxa != ('d_collembola'))
 
 
 ##################################################################################
@@ -100,9 +104,10 @@ soil <- soil %>%
          cum_indiv = 1:n())
 
 
-# plots :)
+# plots :) ------------------------------------------------------------------------
 library(ggplot2)
 
+x11()
 ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer, group = description)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ transect_id) +
@@ -115,6 +120,7 @@ ggplot(soil, aes(x = cum_indiv, y = cum_taxa, color = observer, group = descript
 
 
 #second plot
+x11()
 ggplot(soil, aes(x = time, y = cum_taxa, color = milieux, group = transect_id)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ observer) +
@@ -130,18 +136,83 @@ ggplot(soil, aes(x = time, y = cum_taxa, color = milieux, group = transect_id)) 
 # RARE CURVE WITH VEGAN
 
 # ON GSMF TAXA
-# need to make a count of taxa per transect id for community matrix
+# need to make a count of taxa per transect id for community matrix --------------
+
 commu <- table(soil$transect_id, soil$taxa)
+x11()
+rarecurve(commu, step=1, 
+  xlab="Courbe d'accumulation de la diversité de taxas par transects")
 
-rarecurve(commu, step=1)
+# community matrix per observer --------------------------------------------------
+obs <- table(soil$observer, soil$taxa)
+x11()
+rarecurve(obs, step=1,
+  xlab="Courbe d'accumulation, diversité de taxas par observateur")
 
 
-# rarecurve per habitat
+# rarecurve per habitat, Alex observations --------------------------------------- 
 tab2025 <- subset(soil, soil$observer=='Alex')
-commu2 <- table(tab2025$milieux, tab2025$taxa)
-rarecurve(commu2, step=1)
+veg <- table(tab2025$milieux, tab2025$taxa)
+x11()
+rarecurve(veg, step=1,
+  xlab="Courbe d'accumulation, diversité de taxas par milieux")
 
-# ON INAT TAXA
+##################################################################################
+# Let's get interesting
+
+#  work on ACP now : LIBS -----------------------------------------------------------
+library(FactoMineR)
+library(factoextra)
+library(seriation)
+library(clustertend)
+library(cluster)
+
+# on transects ----------------------------------------------------------------------
+AFC <- CA(commu) # on transects
+summary(AFC)
+
+# représentations -------------------------------------------------------------------
+barplot(AFC$eig[,2])
+transects <- plot(AFC, invisible='col', title='RP des transects')
+taxa <- plot(AFC, invisible='row', title='RP des taxa')
+
+x11()
+fviz_ca(AFC, title="AFC on the community matrix of taxas per transect", 
+col.col = "contrib", arrow = c(FALSE, TRUE))+
+ scale_color_gradient2(low = "grey", mid = "orange", high = "red", midpoint = 25)
+
+# on habitats ----------------------------------------------------------------------
+x11()
+AFC2 <- CA(veg) #on habitats
+summary(AFC2)
+
+
+# on observers ---------------------------------------------------------------------
+x11()
+AFCobs <- CA(obs)
+summary(AFCobs)
+
+barplot(AFCobs$eig[,2], title="Percentage of explanation of dimensions to variables")
+
+x11()
+fviz_ca(AFCobs, col.col = "contrib", title="AFC on the community matrix of taxas per observer",
+  arrow = c(TRUE, FALSE))+
+ scale_color_gradient2(low = "grey", mid = "orange", high = "red", midpoint = 25)
+
+
+# distance matrixes -----------------------------------------------------------------
+distobs <- dist(obs)
+distveg <- dist(veg)
+disttrans <- dist(commu)
+
+x11()
+dissplot(distveg)
+
+x11()
+dissplot(disttrans)
+
+
+# ON INAT TAXA ---------------------------------------------------------------------
 commu <- table(soil$transect_id, soil$ident_taxon_ids)
 
 rarecurve(commu, step=1)
@@ -149,41 +220,3 @@ rarecurve(commu, step=1)
 tab2025 <- subset(soil, soil$observer=='Alex')
 commu2 <- table(tab2025$transect_id, tab2025$ident_taxon_ids)
 rarecurve(commu2, step=1)
-
-
-
-
-##################################################################################
-# Let's get interesting
-
-#  work on ACP now
-library(FactoMineR)
-library(factoextra)
-
-AFC <- CA(commu) # on transects
-summary(AFC)
-
-# représentations
-barplot(AFC$eig[,2])
-transects <- plot(AFC, invisible='col', title='RP des transects')
-taxa <- plot(AFC, invisible='row', title='RP des taxa')
-
-dim12 <- plot(AFC, axes=c(1,2))
-dim23 <- plot(AFC, axes=c(2,3))
-dim13 <- plot(AFC, axes=c(1,3))
-dim34 <- plot(AFC, axes=c(3,4))
-dim24 <- plot(AFC, axes=c(2,4))
-
-dim12
-dim13
-dim23
-dim24
-dim34
-
-#####################################
-AFC2 <- CA(commu2) #on habitats
-summary(AFC2)
-
-
-
-
