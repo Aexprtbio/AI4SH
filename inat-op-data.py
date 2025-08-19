@@ -171,12 +171,12 @@ def getobs_proj(project_id, per_page=200):
 
 print('\n -------------------------------')
 
-user_id=8003020 # my username
-obs=getobs_us(user_id)
-obs[["latitude", "longitude"]] = obs["location"].str.split(',', expand=True)
-obs['session']=obs['description']
+project_id="peltomaan-monimuotoisuus" # my username
+FINproj_obs=getobs_proj(project_id)
+FINproj_obs[["latitude", "longitude"]] = FINproj_obs["location"].str.split(',', expand=True)
+FINproj_obs['session']=FINproj_obs['description']
 # is good and saved
-obs.to_csv('/Users/alexpretat/Documents/alex.csv')
+FINproj_obs.to_csv('/Users/alexpretat/Documents/alex.csv')
 
 ####---------------------------------------------------------------------------------------
 #### NOW TO LAUNCH R SCRIPT TO TAKE IT FROM HERE
