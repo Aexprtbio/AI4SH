@@ -138,6 +138,46 @@ obs['session']=obs['description']
 # is good and saved
 obs.to_csv('/Users/alexpretat/Documents/alex.csv')
 
+# Get obs by project ID
+
+def getobs_proj(project_id, per_page=200):
+    base_url=f'https://api.inaturalist.org/v1/observations/project/:id={project_id}'
+    params = {
+        'username': user_id,
+        'per_page': per_page,
+        'page': 1
+    }
+
+    all_observations = []
+
+    while True:
+        response = requests.get(base_url, params=params)
+        data = response.json()
+
+        # Ajouter les observations à la liste
+        all_observations.extend(data['results'])
+
+        # Vérifier s'il y a plus de pages
+        if len(data['results']) < per_page:
+            break
+
+        # Passer à la page suivante
+        params['page'] += 1
+
+    # Convertir les observations en DataFrame
+    observations_df = pd.DataFrame(all_observations)
+    return observations_df
+
+
+print('\n -------------------------------')
+
+user_id=8003020 # my username
+obs=getobs_us(user_id)
+obs[["latitude", "longitude"]] = obs["location"].str.split(',', expand=True)
+obs['session']=obs['description']
+# is good and saved
+obs.to_csv('/Users/alexpretat/Documents/alex.csv')
+
 ####---------------------------------------------------------------------------------------
 #### NOW TO LAUNCH R SCRIPT TO TAKE IT FROM HERE
 
