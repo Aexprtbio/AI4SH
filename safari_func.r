@@ -14,6 +14,9 @@ getuser <- function(dataset) {
         grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
         grepl("alex", description, ignore.case = TRUE) ~ "Alex",
         grepl("2025-05", observed_on_string, ignore.case = TRUE) ~ "Alex",
+        grepl("collector1", user, ignore.case = TRUE) ~ "Collector1",
+        grepl("collector2", user, ignore.case = TRUE) ~ "Collector2",
+        grepl("collector3", user, ignore.case = TRUE) ~ "Collector1",
         TRUE ~ "Laurence"
       )
     )
@@ -95,3 +98,21 @@ gettaxa <- function(dataset){
 				)
 			)
 }
+
+
+
+# Working for Finland obs and transect ids
+
+# okay let's build a loop
+
+gettransect <- function(dataset){
+	dataset <- dataset %>%
+		mutate(
+			transect_id=case_when(
+				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ substr(description, 1, 3),
+				grepl("Paris", observed_time_zone, ignore.case=TRUE) ~ transect_id
+
+				)
+)
+}
+

@@ -15,7 +15,7 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 # import dataset and process the first time
 
-soil <- read.csv2('merged_dataxa.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
+soil <- read.csv2('merged_dataxa_19082025.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
 colnames(soil)
@@ -30,10 +30,9 @@ source('safari_func.r')
 
 
 # soil <- read.csv2('soil_lu.csv', h = TRUE, sep = ',', stringsAsFactor = FALSE)
-soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- getuser(soil)
-#soil <- getday(soil)
 soil <- gettaxa(soil)
+soil<-gettransect(soil)
 
 # work day time part process ----------------------------------------------------
 soil$time <- as_hms(soil$observed_on_string)
@@ -46,7 +45,10 @@ soil$year <- year(soil$observed_on_string)
 soil$day <- as.factor(soil$day)
 soil$month <- as.factor(soil$month)
 soil$year <- as.factor(soil$year)
-soil$hour <- as.factor(soil$hour
+soil$hour <- as.factor(soil$hour)
+
+
+soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 
 
 # try plots ----------------------------------------------------------------------
@@ -73,32 +75,20 @@ soil <- subset(soil, soil$taxa != ('d_collembola'))
 
 
 ##################################################################################
-# okay let's build a loop
-soil$milieux<-NA
-for (i in 1:length(soil$description)) {
-    if (grepl("meadow", soil$description[i], ignore.case = TRUE)) {
-      soil$milieux[i] <- "meadow"
-    } else if (grepl("forest", soil$description[i], ignore.case = TRUE)) {
-      soil$milieux[i] <- "forest"
-    }
-    else {
-      soil$milieux[i] <- "forest"
-    }
-  }
 
 ##################################################################################
 #taxa as seen on inaturalist
 soil <- soil %>%
-  arrange(observed_on_string, observer, milieux, transect_id) %>%
-  group_by(observer, hour, milieux, transect_id) %>%
+  arrange(observed_on_string, observer, transect_id) %>%
+  group_by(observer, hour, transect_id) %>%
   mutate(obs_id = row_number()) %>%
   mutate(cum_taxa_true = sapply(1:n(), function(i) n_distinct(ident_taxon_ids[1:i])),
          cum_indiv = 1:n())
 
 # taxa as proposed on GSMF dataset
 soil <- soil %>%
-  arrange(observed_on_string, observer, milieux, transect_id) %>%
-  group_by(observer, hour, milieux, transect_id) %>%
+  arrange(observed_on_string, observer, transect_id) %>%
+  group_by(observer, hour, transect_id) %>%
   mutate(obs_id = row_number()) %>%
   mutate(cum_taxa = sapply(1:n(), function(i) n_distinct(taxa[1:i])),
          cum_indiv = 1:n())
