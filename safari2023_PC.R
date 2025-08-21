@@ -196,9 +196,11 @@ soil <- soil %>%
          cum_indiv = 1:n())
 
 
+setwd('D:/GitHub/AI4SH/')
+write.csv(soil, 'soil_for_mod.csv')
+
 soil_ord <- soil %>%
   arrange(transect_id, lapsed_time)
-
 
 
 
