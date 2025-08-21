@@ -11,12 +11,11 @@ getuser <- function(dataset) {
         grepl("erick", user, ignore.case = TRUE) ~ "Eric",
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
         grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
-        grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
         grepl("alex", description, ignore.case = TRUE) ~ "Alex",
-        grepl("2025-05", observed_on_string, ignore.case = TRUE) ~ "Alex",
+        grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
         grepl("collector1", user, ignore.case = TRUE) ~ "Collector1",
         grepl("collector2", user, ignore.case = TRUE) ~ "Collector2",
-        grepl("collector3", user, ignore.case = TRUE) ~ "Collector1",
+        grepl("collector3", user, ignore.case = TRUE) ~ "Collector3",
         TRUE ~ "Laurence"
       )
     )
@@ -101,18 +100,61 @@ gettaxa <- function(dataset){
 
 
 
+############################################################
 # Working for Finland obs and transect ids
 
 # okay let's build a loop
 
-gettransect <- function(dataset){
-	dataset <- dataset %>%
-		mutate(
-			transect_id=case_when(
-				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ substr(description, 1, 3),
-				grepl("Paris", observed_time_zone, ignore.case=TRUE) ~ transect_id
+library(dplyr)
+library(stringr)
 
-				)
-)
+gettransect <- function(dataset) {
+    dataset <- dataset %>%
+        mutate(
+            transect_id = ifelse(
+                grepl("Helsinki", observed_time_zone, ignore.case = TRUE),
+                str_extract(description, "^[A-Za-z]{1}\\d{1,2}"),
+                transect_id
+            )
+        )
+    return(dataset)
 }
 
+
+#############################################################
+# Build a function to get the order in which samples are found
+
+getorder <- function(dataset){
+	dataset <- dataset %>%
+		mutate(
+			sample_order = ifelse(
+				grepl("Helsinki", observed_time_zone, ignore.case = TRUE),
+				str_extract(description, "\\d+$"),
+				NA_character_
+
+				)
+			)
+		return(dataset)
+
+
+}
+
+
+
+
+
+#############################################################
+# Function calculating time since first photo
+
+lapsed_time <- function(dataset) {
+  dataset <- dataset %>%
+    arrange(transect_id, time) %>%
+    group_by(transect_id) %>%
+    mutate(
+      first_obs_time = first(time),
+      lapsed_time = as.numeric(difftime(time, first_obs_time, units = "secs"))
+    ) %>%
+    ungroup()
+
+  return(dataset)
+}
