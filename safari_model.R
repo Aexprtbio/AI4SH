@@ -81,7 +81,7 @@ newdata <- as.data.frame(matrix(ncol=2, nrow=1000))
 colnames(newdata) <- c('lapsed_time', 'observer')
 
 newdata$lapsed_time <- floor(runif(1000, min=0, max=3800))
-newdata$observer <- rep(c('Alex','Jerome', 'Collector1', 'Collector2', 'Collector3'), times=200)
+newdata$observer <- rep(levels(soil$observer), times=100)
 
 
 newdata$predictions<-predict(mod1, newdata=newdata, type='response')

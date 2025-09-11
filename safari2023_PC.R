@@ -17,7 +17,7 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 # import dataset and process the first time
 
-soil <- read.csv2('merged_dataxa_19082025_corr.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
+soil <- read.csv2('merged_data_processed_11092025.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
 colnames(soil)
@@ -116,7 +116,7 @@ ggplot(soil, aes(x = sample_order, y = ord_taxa, color = observer, group = trans
 
 #second plot
 x11()
-ggplot(soil, aes(x = time, y = cum_taxa, color = milieux, group = transect_id)) +
+ggplot(soil, aes(x = time, y = ord_taxa, color = transect_id, group = transect_id)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ observer) +
   labs(
