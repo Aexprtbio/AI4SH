@@ -13,9 +13,9 @@ getuser <- function(dataset) {
         grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
         grepl("alex", description, ignore.case = TRUE) ~ "Alex",
         grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
-        grepl("collector1", user, ignore.case = TRUE) ~ "Collector1",
-        grepl("collector2", user, ignore.case = TRUE) ~ "Collector2",
-        grepl("collector3", user, ignore.case = TRUE) ~ "Collector3",
+        grepl("collector1", user, ignore.case = TRUE) ~ "Pierre",
+        grepl("collector2", user, ignore.case = TRUE) ~ "Paul",
+        grepl("collector3", user, ignore.case = TRUE) ~ "Jacques",
         TRUE ~ "Laurence"
       )
     )
@@ -157,4 +157,15 @@ lapsed_time <- function(dataset) {
     ungroup()
 
   return(dataset)
+}
+
+
+
+
+#############################################################
+# Function retrieving habitats when possible
+
+milieu <- function(dataset) {
+	dataset <- dataset %>%
+		arrange()
 }

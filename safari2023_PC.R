@@ -1,7 +1,7 @@
 # CREATED ON 09 MAY 2025
 # PRÉTAT
 
-# Last update : 20/08/2025
+# Last update : 25/09/2025
 
 rm(list=ls())
 
@@ -32,6 +32,8 @@ source('safari_func.r')
 
 
 # soil <- read.csv2('soil_lu.csv', h = TRUE, sep = ',', stringsAsFactor = FALSE)
+
+soil$transect_id <- as.factor(soil$transect_id)
 soil <- getuser(soil)
 soil <- gettaxa(soil)
 soil<-gettransect(soil)
@@ -161,21 +163,46 @@ rarecurve(commucoll3, step=1,
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector3 - Cropfields", ylim=c(1,10))
 
 
+
+
 # need to make a count of taxa per transect id for community matrix --------------
 
-commu <- table(soil$transect_id, soil$taxa)
-x11()
-rarecurve(commu, step=1, 
-  xlab="Courbe d'accumulation de la diversité de taxas par transects")
+soil$taxa <- as.factor(soil$taxa)
+soil$transect_id <- as.factor(soil$transect_id)
+soil$observer <- as.factor(soil$observer)
 
 # community matrix per observer --------------------------------------------------
-obs <- table(soil$observer, soil$taxa)
-x11()
-rarecurve(obs, step=1,
-  xlab="Courbe d'accumulation, diversité de taxas par observateur")
+
+# Créer une variable combinée
+soil$obs_transect <- paste(soil$observer, soil$transect_id, sep = "_")
+
+# Table de contingence avec la variable combinée
+obs_trans <- table(soil$obs_transect, soil$taxa)
+
+# Metadata avec les informations séparées
+metadata <- data.frame(
+  "Site" = rownames(obs_trans),
+  "observer" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 1),
+  "transect_id" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 2)
+)
+
+# Courbes de raréfaction
+plotobs <- rarecurve(obs_trans, step=2, tidy=TRUE,
+                     xlab="Courbe d'accumulation de la diversité de taxas") %>%
+  left_join(metadata, by = "Site")
+
+# Graphique
+ggplot(plotobs) +
+  geom_line(aes(x = Sample, y = Species, group = Site, colour = observer)) +
+  facet_wrap(~transect_id) +
+  theme_bw() +
+  labs(colour = "Observateur")
 
 
-
+ggplot(plotobs) + 
+  geom_line(aes(x = Sample, y = Species, group = Site, colour = transect_id)) +
+  facet_wrap(~observer) +
+  theme_bw()
 
 ##################################################################################
 ##################################################################################
