@@ -17,7 +17,7 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 # import dataset and process the first time
 
-soil <- read.csv2('merged_data_processed_11092025.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
+soil <- read.csv2('merged_dataxa_26092025_process.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
 colnames(soil)
@@ -34,7 +34,7 @@ source('safari_func.r')
 # soil <- read.csv2('soil_lu.csv', h = TRUE, sep = ',', stringsAsFactor = FALSE)
 
 soil$transect_id <- as.factor(soil$transect_id)
-soil <- getuser(soil)
+#soil <- getuser(soil)
 soil <- gettaxa(soil)
 soil<-gettransect(soil)
 
@@ -202,7 +202,57 @@ ggplot(plotobs) +
 ggplot(plotobs) + 
   geom_line(aes(x = Sample, y = Species, group = Site, colour = transect_id)) +
   facet_wrap(~observer) +
-  theme_bw()
+  theme_bw()+
+  labs(
+    title = "Rarefaction curves from the 'Safari' sampling",
+    subtitle = "1 plot per observer",
+    x = "Number of invertebrates sampled",
+    y = "Species Richness")
+
+
+
+
+
+
+# same but with original taxas --------------------------------------------------
+
+soil$taxon_id <- as.factor(soil$ident_taxon_ids)
+
+
+obs_trans <- table(soil$obs_transect, soil$taxon_id)
+
+# Metadata avec les informations séparées
+metadata <- data.frame(
+  "Site" = rownames(obs_trans),
+  "observer" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 1),
+  "transect_id" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 2)
+)
+
+# Courbes de raréfaction
+plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
+                     xlab="Courbe d'accumulation de la diversité de taxas") %>%
+  left_join(metadata, by = "Site")
+
+#ggplot graph
+
+x11()
+ggplot(plotobs2) +
+  geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
+  geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
+
+  facet_wrap(~transect_id) +
+  theme_bw() +
+  labs(
+    title = "Rarefaction curves from the 'Safari' sampling",
+    subtitle = "1 plot per observer",
+    x = "Number of invertebrates sampled",
+    y = "Species Richness")
+
+
+
+
+
+
 
 ##################################################################################
 ##################################################################################
