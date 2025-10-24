@@ -96,7 +96,7 @@ print('\n -------------------------------')
 
 # Get obs by project ID
 def getobs_proj(project_id, per_page=200):
-    base_url=f'https://api.inaturalist.org/v1/observations/project/:id={project_id}'
+    base_url=f'https://api.inaturalist.org/v2/observations/project/:id={project_id}'
     params = {
         'project': project_id,
         'per_page': per_page,
