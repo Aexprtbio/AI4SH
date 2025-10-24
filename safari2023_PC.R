@@ -10,13 +10,19 @@ library(car)
 library(dplyr)
 library(hms)
 library(lubridate)
+library(reticulate) # to import Python functions and script
 library(tidyr)
 library(vegan)
 
+##### Source python
+reticulate::source_python('inat-op-data.py')
+
+
+##### Setting work directory
 setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
-# import dataset and process the first time
 
+# import dataset and process the first time
 soil <- read.csv2('merged_dataxa_26092025_process.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
@@ -26,7 +32,6 @@ soil$observed_on_string <- ymd_hms(soil$time_observed_at)
 
 ################################################################################
 # use the safari func script
-
 setwd('D:/GitHub/AI4SH')
 source('safari_func.r')
 
