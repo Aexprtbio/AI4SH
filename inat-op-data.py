@@ -53,10 +53,6 @@ def getobs_bytax(taxon_id, per_page=200, name='all_observations'):
 print('\n -------------------------------')
 
 
-soil[["latitude", "longitude"]] = soil["location"].str.split(',', expand=True)
-soil["session"]='NA'
-
-
 ####---------------------------------------------------------------------------------------
 #### GET BY USER to fetch observations
 import requests
@@ -94,9 +90,6 @@ def getobs_us(user_id, per_page=200):
 
 print('\n -------------------------------')
 
-
-obs[["latitude", "longitude"]] = obs["location"].str.split(',', expand=True)
-obs['session']=obs['description']
 # is good and saved
 
 
@@ -133,7 +126,6 @@ def getobs_proj(project_id, per_page=200):
 
 print('\n -------------------------------')
 
-FINproj_obs[["latitude", "longitude"]] = FINproj_obs["location"].str.split(',', expand=True)
-FINproj_obs['session']=FINproj_obs['description']
+
 # is good and saved
 
