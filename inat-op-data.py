@@ -105,7 +105,7 @@ obs['session']=obs['description']
 def getobs_proj(project_id, per_page=200):
     base_url=f'https://api.inaturalist.org/v1/observations/project/:id={project_id}'
     params = {
-        'username': user_id,
+        'project': project_id,
         'per_page': per_page,
         'page': 1
     }
