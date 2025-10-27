@@ -15,8 +15,12 @@ library(tidyr)
 library(vegan)
 
 ##### Source python
-reticulate::source_python('inat-op-data.py')
+use_python('C:/Users/PRETAT/anaconda3/')
+use_condaenv('torch13')
 
+
+##### Import homemade module for APIs
+inatapi <- import_from_path("D:/GitHub/AI4SH/inatopendata.py")
 
 ##### Setting work directory
 setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
