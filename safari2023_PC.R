@@ -20,7 +20,7 @@ use_condaenv('torch13')
 
 
 ##### Import homemade module for APIs
-inatapi <- import_from_path("D:/GitHub/AI4SH/inatopendata.py")
+inatuapi <- import_main("inatuapi", convert=TRUE)
 
 ##### Setting work directory
 setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
