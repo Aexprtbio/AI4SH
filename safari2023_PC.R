@@ -20,7 +20,14 @@ use_condaenv('torch13')
 
 
 ##### Import homemade module for APIs
-inatuapi <- import_main("inatuapi", convert=TRUE)
+setwd('D:/GitHub/AI4SH/1-ModulesPython/inatuapi/')
+source_python("inatuapi_funcs.py")
+
+# the use of python functions in r with reticulate must be preceded by 'py$'
+rouen <- py$getobs_proj('262646') # --> get obs from the aifsh 2025 project on inat
+
+rouen <- py_to_r(rouen) # convert python object to r object.
+
 
 ##### Setting work directory
 setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
