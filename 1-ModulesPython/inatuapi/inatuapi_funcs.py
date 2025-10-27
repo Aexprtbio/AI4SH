@@ -51,7 +51,7 @@ def getobs_bytax(taxon_id, per_page=200, name='all_observations'):
 
 
 print('\n -------------------------------')
-
+print('Function getobs_bytax loaded')
 
 ####---------------------------------------------------------------------------------------
 #### GET BY USER to fetch observations
@@ -89,6 +89,7 @@ def getobs_us(user_id, per_page=200):
 
 
 print('\n -------------------------------')
+print('Function getobs_us loaded')
 
 # is good and saved
 
@@ -125,7 +126,7 @@ def getobs_proj(project_id, per_page=200):
 
 
 print('\n -------------------------------')
-
+print('Function getobs_proj loaded')
 
 # is good and saved
 

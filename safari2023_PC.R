@@ -14,6 +14,11 @@ library(reticulate) # to import Python functions and script
 library(tidyr)
 library(vegan)
 
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
 ##### Source python
 use_python('C:/Users/PRETAT/anaconda3/')
 use_condaenv('torch13')
@@ -24,9 +29,17 @@ setwd('D:/GitHub/AI4SH/1-ModulesPython/inatuapi/')
 source_python("inatuapi_funcs.py")
 
 # the use of python functions in r with reticulate must be preceded by 'py$'
-rouen <- py$getobs_proj('262646') # --> get obs from the aifsh 2025 project on inat
+lastobs <- py$getobs_proj('262646') # --> get obs from the aifsh 2025 project on inat
 
-rouen <- py_to_r(rouen) # convert python object to r object.
+py$pd$DataFrame$to_csv(lastobs, 'D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/lastobs.csv')
+
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+
 
 
 ##### Setting work directory
@@ -34,6 +47,7 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 
 # import dataset and process the first time
+
 soil <- read.csv2('merged_dataxa_26092025_process.csv', h = TRUE, sep = ';', stringsAsFactor = TRUE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
