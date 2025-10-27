@@ -11,13 +11,11 @@ getuser <- function(dataset) {
         grepl("erick", user, ignore.case = TRUE) ~ "Eric",
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
         grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
-        grepl("alex", description, ignore.case = TRUE) ~ "Alex",
+        grepl("alex", user, ignore.case = TRUE) ~ "Alex",
         grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
         grepl("collector1", user, ignore.case = TRUE) ~ "Pierre",
         grepl("collector2", user, ignore.case = TRUE) ~ "Paul",
-        grepl("collector3", user, ignore.case = TRUE) ~ "Jacques",
-        TRUE ~ "Laurence"
-      )
+        grepl("collector3", user, ignore.case = TRUE) ~ "Jacques"      )
     )
   return(dataset)
 }
@@ -114,8 +112,8 @@ gettransect <- function(dataset) {
             transect_id = ifelse(
                 grepl("Helsinki", observed_time_zone, ignore.case = TRUE),
                 str_extract(description, "^[A-Za-z]{1}\\d{1,2}"),
-                transect_id
-            )
+                description        
+                )
         )
     return(dataset)
 }
@@ -167,5 +165,14 @@ lapsed_time <- function(dataset) {
 
 milieu <- function(dataset) {
 	dataset <- dataset %>%
-		arrange()
+		mutate(
+			vegetation = case_when(
+				grepl("Ro", transect_id, ignore.case=TRUE) ~ 'Forest',
+				grepl("forest", description, ignore.case=TRUE) ~ 'Forest',
+				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ 'Crop',
+				grepl("meadow", transect_id, ignore.case=TRUE) ~ 'Grassland'),
+				NA_character_
+				
+			)
+		return(dataset)
 }

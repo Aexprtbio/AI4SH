@@ -5,15 +5,6 @@
 
 rm(list=ls())
 
-library(ade4)
-library(car)
-library(dplyr)
-library(hms)
-library(lubridate)
-library(reticulate) # to import Python functions and script
-library(tidyr)
-library(vegan)
-
 #########################################################################################################
 #########################################################################################################
 #########################################################################################################
@@ -40,7 +31,15 @@ py$pd$DataFrame$to_csv(lastobs, 'D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/l
 #########################################################################################################
 #########################################################################################################
 
-
+library(ade4)
+library(car)
+library(dplyr)
+library(ggplot2)
+library(hms)
+library(lubridate)
+library(reticulate) # to import Python functions and script
+library(tidyr)
+library(vegan)
 
 ##### Setting work directory
 setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
@@ -48,7 +47,7 @@ setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
 
 # import dataset and process the first time
 lastobs <- read.csv2('lastobs.csv', h=TRUE, sep=',', stringsAsFactor=FALSE, na=c('','NA','na'))
-soil <- read.csv2('merged_dataxa_26092025_process.csv', h = TRUE, sep = ';', stringsAsFactor = FALSE, na=c('', 'NA', 'na'))
+soil <- read.csv2('merged_dataxa_26092025_process2.csv', h = TRUE, sep = ';', stringsAsFactor = FALSE, na=c('', 'NA', 'na'))
 #soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
 
 # check the "soil" df
@@ -82,32 +81,62 @@ lastobs <- gettransect(lastobs)
 lastobs <- getuser(lastobs)
 lastobs <- getorder(lastobs)  #not really convenient at this moment
 
+
 # work day time part process ----------------------------------------------------
 soil$time <- as_hms(soil$observed_on_string)
+lastobs$time <- as_hms(lastobs$observed_on_string)
+
 soil$day <- day(soil$observed_on_string)
+lastobs$day <- day(lastobs$observed_on_string)
+
 soil$month <- month(soil$observed_on_string)
+lastobs$month <- month(lastobs$observed_on_string)
+
 soil$year <- year(soil$observed_on_string)
+lastobs$year <- year(lastobs$observed_on_string)
 
 # convert to factor -------------------------------------------------------------
 soil$day <- as.factor(soil$day)
 soil$month <- as.factor(soil$month)
 soil$year <- as.factor(soil$year)
-soil$hour <- as.factor(soil$hour)
 
 
-soil <- subset(soil, is.na(soil$transect_id)==FALSE)
+lastobs$day <- as.factor(lastobs$day)
+lastobs$month <- as.factor(lastobs$month)
+lastobs$year <- as.factor(lastobs$year)
 
+# after this processing : check the dims
+dim(soil)
+dim(lastobs) # missing 6 columns
+
+soil <- soil[,-2]
+
+colnames(soil[1]) <- 'X'
+
+lastobs$latitude_x <- NA
+lastobs$longitude_x <- NA
+lastobs$latitude_y <- NA
+lastobs$longitude_y <- NA
+lastobs$microhabitat <- NA
+lastobs$vegetation <- NA
+lastobs$plot_id <- NA
+
+dim(soil)
+dim(lastobs)
+
+inter <- intersect(names(soil), names(lastobs))
+lastobs <- lastobs[,inter]
+
+
+#################################################################################
+# merging dataframes
+
+soil <- rbind(soil, lastobs)
+
+soil <- milieu(soil)
 
 # try plots ----------------------------------------------------------------------
 boxplot(soil$time~soil$month) ## cool
-
-#lets rewwork the DF
-
-View(soil)
-
-soil$ident_taxon_ids
-
-
 
 ################################################################################
 
@@ -119,6 +148,8 @@ boxplot(soil$time~soil$observer)
 
 soil <- subset(soil, soil$taxa != ('d_acari'))
 soil <- subset(soil, soil$taxa != ('d_collembola'))
+soil <- subset(soil, is.na(soil$transect_id)==FALSE)
+soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
 
 ##################################################################################
@@ -141,43 +172,6 @@ soil <- soil %>%
 
 
 
-
-# plots :) ------------------------------------------------------------------------
-library(ggplot2)
-
-x11()
-ggplot(soil, aes(x = sample_order, y = ord_taxa, color = observer, group = transect_id)) +
-  geom_line(linewidth = 1.2) +
-  facet_wrap(~ transect_id) +
-  labs(
-    title = "Courbe d'accumulation de la biodiversité",
-    subtitle = "Taxa en fonction du nombre d'individus par jour et observateur",
-    x = "Nombre cumulé d'individus observés",
-    y = "Richesse spécifique (taxa uniques)") +
-  theme_minimal()
-
-
-#second plot
-x11()
-ggplot(soil, aes(x = time, y = ord_taxa, color = transect_id, group = transect_id)) +
-  geom_line(linewidth = 1.2) +
-  facet_wrap(~ observer) +
-  labs(
-    title = "Courbe d'accumulation de la biodiversité",
-    subtitle = "Taxa en fonction du temps d'observation",
-    x = "Nombre cumulé d'individus observés",
-    y = "Richesse spécifique (taxa uniques)") +
-  theme_minimal()
-
-
-
-
-
-
-
-
-
-
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
@@ -187,24 +181,25 @@ ggplot(soil, aes(x = time, y = ord_taxa, color = transect_id, group = transect_i
 
 # need to make a count of taxa per sample order and transect id for community matrix --------------
 collector1 <- subset(soil, soil$observer=="Collector1")
-commucoll1 <- table(collector1$transect_id, collector1$ord_taxa)
+commucoll1 <- table(collector1$transect_id, collector1$taxa)
 x11()
 par(mfrow=c(1,3))
 rarecurve(commucoll1, step=1, 
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector1 - Cropfields", ylim=c(1,10))
 
 collector2 <- subset(soil, soil$observer=="Collector2")
-commucoll2 <- table(collector2$transect_id, collector2$ord_taxa)
+commucoll2 <- table(collector2$transect_id, collector2$taxa)
 rarecurve(commucoll2, step=1, 
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector2 - Cropfields", ylim=c(1,10))
 
 collector3 <- subset(soil, soil$observer=="Collector3")
-commucoll3 <- table(collector3$transect_id, collector3$ord_taxa)
+commucoll3 <- table(collector3$transect_id, collector3$taxa)
 rarecurve(commucoll3, step=1, 
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector3 - Cropfields", ylim=c(1,10))
 
 
-
+curv <- table(soil$vegetation, soil$taxa)
+rarecurve(curv, step=1)
 
 # need to make a count of taxa per transect id for community matrix --------------
 
@@ -279,7 +274,7 @@ plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
 x11()
 ggplot(plotobs2) +
   geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
-  geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
+#  geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
 
   facet_wrap(~transect_id) +
   theme_bw() +
