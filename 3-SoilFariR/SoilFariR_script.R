@@ -1,145 +1,41 @@
 # CREATED ON 09 MAY 2025
 # PRÉTAT
 
-# Last update : 25/09/2025
+# Last update : 28/10/2025
 
 rm(list=ls())
 
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-##### Source python
-use_python('C:/Users/PRETAT/anaconda3/')
-use_condaenv('torch13')
-
-
-##### Import homemade module for APIs
-setwd('D:/GitHub/AI4SH/1-ModulesPython/inatuapi/')
-source_python("inatuapi_funcs.py")
-
-# the use of python functions in r with reticulate must be preceded by 'py$'
-lastobs <- py$getobs_proj('262646') # --> get obs from the aifsh 2025 project on inat
-
-py$pd$DataFrame$to_csv(lastobs, 'D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/lastobs.csv')
-
-
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-#########################################################################################################
-
+# libraries --------------------------------------------------------------------------
 library(ade4)
 library(car)
 library(dplyr)
 library(ggplot2)
 library(hms)
 library(lubridate)
-library(reticulate) # to import Python functions and script
 library(tidyr)
 library(vegan)
 
-##### Setting work directory
-setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
+#  work on ACP now : LIBS -----------------------------------------------------------
+library(FactoMineR)
+library(factoextra)
+library(seriation)
+library(clustertend)
+library(cluster)
+
+# import functions from SoilFariR_functions.r ---------------------------------------
+setwd('D:/GitHub/AI4SH/3-SoilFariR')
+source('SoilFariR_functions.r')
 
 
-# import dataset and process the first time
-lastobs <- read.csv2('lastobs.csv', h=TRUE, sep=',', stringsAsFactor=FALSE, na=c('','NA','na'))
-soil <- read.csv2('merged_dataxa_26092025_process2.csv', h = TRUE, sep = ';', stringsAsFactor = FALSE, na=c('', 'NA', 'na'))
-#soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
+# import up to date DataFrame -------------------------------------------------------
+setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
-# check the "soil" df
-colnames(soil)
-length(soil$observed_on_string)
-soil$observed_on_string <- ymd_hms(soil$time_observed_at) # convert time of observation to date
-
-# check the "lastobs" df
-colnames(lastobs)
-lastobs$observed_on_string <- ymd_hms(lastobs$time_observed_at)
+soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
+summary(soil)
 
 ################################################################################
-# use the safari func script
-setwd('D:/GitHub/AI4SH')
-source('safari_func.r')
-
-
-# use r function to curate the "soil" df
-#soil <- getuser(soil)
-soil <- gettaxa(soil)
-soil<-gettransect(soil)
-soil$transect_id <- as.factor(soil$transect_id)
-
-soil$sample_order <- NA
-soil<-getorder(soil)
-
-
-# use r function to curate "lastobs" df
-lastobs <- gettaxa(lastobs)
-lastobs <- gettransect(lastobs)
-lastobs <- getuser(lastobs)
-lastobs <- getorder(lastobs)  #not really convenient at this moment
-
-
-# work day time part process ----------------------------------------------------
-soil$time <- as_hms(soil$observed_on_string)
-lastobs$time <- as_hms(lastobs$observed_on_string)
-
-soil$day <- day(soil$observed_on_string)
-lastobs$day <- day(lastobs$observed_on_string)
-
-soil$month <- month(soil$observed_on_string)
-lastobs$month <- month(lastobs$observed_on_string)
-
-soil$year <- year(soil$observed_on_string)
-lastobs$year <- year(lastobs$observed_on_string)
-
-# convert to factor -------------------------------------------------------------
-soil$day <- as.factor(soil$day)
-soil$month <- as.factor(soil$month)
-soil$year <- as.factor(soil$year)
-
-
-lastobs$day <- as.factor(lastobs$day)
-lastobs$month <- as.factor(lastobs$month)
-lastobs$year <- as.factor(lastobs$year)
-
-# after this processing : check the dims
-dim(soil)
-dim(lastobs) # missing 6 columns
-
-soil <- soil[,-2]
-
-colnames(soil[1]) <- 'X'
-
-lastobs$latitude_x <- NA
-lastobs$longitude_x <- NA
-lastobs$latitude_y <- NA
-lastobs$longitude_y <- NA
-lastobs$microhabitat <- NA
-lastobs$vegetation <- NA
-lastobs$plot_id <- NA
-
-dim(soil)
-dim(lastobs)
-
-inter <- intersect(names(soil), names(lastobs))
-lastobs <- lastobs[,inter]
-
-
-#################################################################################
-# merging dataframes
-
-soil <- rbind(soil, lastobs)
-
-soil <- milieu(soil)
-
 # try plots ----------------------------------------------------------------------
 boxplot(soil$time~soil$month) ## cool
-
-################################################################################
-
 # let's now process the number of individuals on time by user.
 
 boxplot(soil$time~soil$observer)
@@ -198,8 +94,9 @@ rarecurve(commucoll3, step=1,
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector3 - Cropfields", ylim=c(1,10))
 
 
-curv <- table(soil$vegetation, soil$taxa)
-rarecurve(curv, step=1)
+# Whole dataset - vegetation x taxa
+commu <- table(soil$vegetation, soil$taxa)
+rarecurve(commu, step=1)
 
 # need to make a count of taxa per transect id for community matrix --------------
 
@@ -344,12 +241,8 @@ ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
 ##################################################################################
 # Let's get interesting
 
-#  work on ACP now : LIBS -----------------------------------------------------------
-library(FactoMineR)
-library(factoextra)
-library(seriation)
-library(clustertend)
-library(cluster)
+# retrieve species guess with SoilFariR function 'getspecies' -----------------------
+soil <- getspecies(soil)
 
 # working on FINLAND results only at first
 # on transects ----------------------------------------------------------------------
@@ -366,7 +259,7 @@ col.col = "contrib", arrow = c(FALSE, TRUE))+
 
 
 # On the whole dataset on a 2nd time -------------------------------------------------
-AFC <- CA(commu) # on transects
+AFC <- CA(commu) # on vegetation
 summary(AFC)
 
 # représentations -------------------------------------------------------------------
@@ -375,14 +268,18 @@ transects <- plot(AFC, invisible='col', title='RP des transects')
 taxa <- plot(AFC, invisible='row', title='RP des taxa')
 
 x11()
-fviz_ca(AFC, title="AFC on the community matrix of taxas per transect", 
-col.col = "contrib", arrow = c(FALSE, TRUE))+
- scale_color_gradient2(low = "grey", mid = "orange", high = "red", midpoint = 25)
+fviz_ca(AFC, title="AFC on the community matrix of taxas per vegetation type", 
+col.col = "contrib", arrow = c(FALSE, FALSE))+
+ scale_color_gradient2(low = "darkolivegreen2", mid = "indianred2", high = "red", midpoint = 25)
 
-# on habitats ----------------------------------------------------------------------
-x11()
-AFC2 <- CA(veg) #on habitats
-summary(AFC2)
+
+####################################################################################
+# on habitats x inaturalist taxa --------------------------------------------------
+incommu <- table(soil$vegetation, soil$species_guess)
+
+AFCincomm <- CA(incommu)
+summary(AFCincomm)
+
 
 
 # on observers ---------------------------------------------------------------------

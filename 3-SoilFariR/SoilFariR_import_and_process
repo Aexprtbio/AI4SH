@@ -1,0 +1,138 @@
+# CREATED ON 09 MAY 2025
+# PRÉTAT
+
+# Last update : 28/10/2025
+
+rm(list=ls())
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+##### Source python
+use_python('C:/Users/PRETAT/anaconda3/')
+use_condaenv('torch13')
+
+
+##### Import homemade module for APIs
+setwd('D:/GitHub/AI4SH/1-ModulesPython/inatuapi/')
+source_python("inatuapi_funcs.py")
+
+# the use of python functions in r with reticulate must be preceded by 'py$'
+lastobs <- py$getobs_proj('262646') # --> get obs from the aifsh 2025 project on inat
+
+py$pd$DataFrame$to_csv(lastobs, 'D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/lastobs.csv')
+
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+
+library(ade4)
+library(car)
+library(dplyr)
+library(ggplot2)
+library(hms)
+library(lubridate)
+library(reticulate) # to import Python functions and script
+library(tidyr)
+library(vegan)
+
+##### Setting work directory
+setwd('D:/GitHub/POLLSOL-AIFSH/AIFSH/4-SAFARI-method/')
+
+
+# import dataset and process the first time
+lastobs <- read.csv2('lastobs.csv', h=TRUE, sep=',', stringsAsFactor=FALSE, na=c('','NA','na'))
+soil <- read.csv2('merged_dataxa_26092025_process2.csv', h = TRUE, sep = ';', stringsAsFactor = FALSE, na=c('', 'NA', 'na'))
+#soil2 <- read.csv2('soil.csv', h = TRUE, sep = ',', stringsAsFactor = TRUE)
+
+# check the "soil" df
+colnames(soil)
+length(soil$observed_on_string)
+soil$observed_on_string <- ymd_hms(soil$time_observed_at) # convert time of observation to date
+
+# check the "lastobs" df
+colnames(lastobs)
+lastobs$observed_on_string <- ymd_hms(lastobs$time_observed_at)
+
+################################################################################
+# use the safari func script
+setwd('D:/GitHub/AI4SH')
+source('safari_func.r')
+
+
+# use r function to curate the "soil" df
+#soil <- getuser(soil)
+soil <- gettaxa(soil)
+soil<-gettransect(soil)
+soil$transect_id <- as.factor(soil$transect_id)
+
+soil$sample_order <- NA
+soil<-getorder(soil)
+
+
+# use r function to curate "lastobs" df
+lastobs <- gettaxa(lastobs)
+lastobs <- gettransect(lastobs)
+lastobs <- getuser(lastobs)
+lastobs <- getorder(lastobs)  #not really convenient at this moment
+
+
+# work day time part process ----------------------------------------------------
+soil$time <- as_hms(soil$observed_on_string)
+lastobs$time <- as_hms(lastobs$observed_on_string)
+
+soil$day <- day(soil$observed_on_string)
+lastobs$day <- day(lastobs$observed_on_string)
+
+soil$month <- month(soil$observed_on_string)
+lastobs$month <- month(lastobs$observed_on_string)
+
+soil$year <- year(soil$observed_on_string)
+lastobs$year <- year(lastobs$observed_on_string)
+
+# convert to factor -------------------------------------------------------------
+soil$day <- as.factor(soil$day)
+soil$month <- as.factor(soil$month)
+soil$year <- as.factor(soil$year)
+
+
+lastobs$day <- as.factor(lastobs$day)
+lastobs$month <- as.factor(lastobs$month)
+lastobs$year <- as.factor(lastobs$year)
+
+# after this processing : check the dims
+dim(soil)
+dim(lastobs) # missing 6 columns
+
+soil <- soil[,-2]
+
+colnames(soil[1]) <- 'X'
+
+lastobs$latitude_x <- NA
+lastobs$longitude_x <- NA
+lastobs$latitude_y <- NA
+lastobs$longitude_y <- NA
+lastobs$microhabitat <- NA
+lastobs$vegetation <- NA
+lastobs$plot_id <- NA
+
+dim(soil)
+dim(lastobs)
+
+inter <- intersect(names(soil), names(lastobs))
+lastobs <- lastobs[,inter]
+
+
+#################################################################################
+# merging dataframes
+
+soil <- rbind(soil, lastobs)
+
+soil <- milieu(soil)
+
+write.csv(soil, 'D:/GitHub/AI4SH/4-DataFrames_ready/uptodate_DataFrame.csv')

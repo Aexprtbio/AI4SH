@@ -176,3 +176,14 @@ milieu <- function(dataset) {
 			)
 		return(dataset)
 }
+
+
+getspecies <- function(dataset){
+	dataset<-dataset %>%
+	mutate(
+		species_guess = case_when(
+			str_extract(identifications, "?<='(min_species_taxon_id': 61325, 'name': ')[^']+")
+
+			)
+		)
+}
