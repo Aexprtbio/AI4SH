@@ -28,8 +28,10 @@ The script 'SoilFariR_functions.R' contains the definition of functions necessar
 
 The 'SoilFariR_import_and_process.R' file contains the commands to call the python module and processing the different DataFrames to make it usable and coherent.
 
-The 'SoilFariR_script.R'
+The 'SoilFariR_script.R' contains the main exploratory analysis so far, including rarecurves and CAs/PCAs analysis on community matrixes.
 
 ## 4-DataFrames_ready
+The folder for the usable and processed DataFrames to import in 'SoilFariR_script.R' file.
 
 ## 5-DataFrames_transients
+Transitory dataframes created during the first steps of development.
