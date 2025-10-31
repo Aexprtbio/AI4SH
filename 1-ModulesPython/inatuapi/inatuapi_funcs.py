@@ -21,22 +21,22 @@ import numpy as np
 ##############################
 # Lets get obs by taxon_id
 
-def getobs_bytax(taxon_id, per_page=200, name='all_observations'):
-    base_url=f'https://api.inaturalist.org/v1/identifications?taxon_id={taxon_id}&order=desc'
+def getobs_bytax(list_id, per_page=200, country=[], region=[]):
+    base_url=f'https://api.inaturalist.org/v1/identifications?list_id={list_id}&order=desc'
     params = {
-        'project_id': project_id,
         'per_page': per_page,
-        'page': 1
+        'page': 1,
+        'list_id' : list_id
     }
 
-    {name} == []
+    name = []
 
     while True:
         response = requests.get(base_url, params=params)
         data = response.json()
 
         # Ajouter les observations à la liste
-        {name}.extend(data['results'])
+        name.extend(data['results'])
 
         # Vérifier s'il y a plus de pages
         if len(data['results']) < per_page:
@@ -46,8 +46,18 @@ def getobs_bytax(taxon_id, per_page=200, name='all_observations'):
         params['page'] += 1
 
     # Convertir les observations en DataFrame
-    {name} == pd.DataFrame({name})
-    return {name}
+    name = pd.DataFrame(name)
+    if 'place_guess' in name.columns:
+        name['country']=name['place_guess'].apply(lambda x: x.split(',')[-1].strip())
+        name['region']=name['place_guess'].apply(lambda x: x.split(',')[-2].strip())
+
+
+    if country:
+        name = name[name['country'].isin(country)]
+    if region:
+        name = name[name['region'].isin(region)]
+
+    return name
 
 
 print('\n -------------------------------')
