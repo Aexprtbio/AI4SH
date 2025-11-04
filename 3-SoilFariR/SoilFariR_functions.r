@@ -194,3 +194,15 @@ getspecies <- function(dataset){
 
 		)
 }
+
+getfamily <- function(dataset){
+	dataset<-dataset %>%
+	mutate(
+		family_guess = str_extract(identifications, "{'id': \\d+, 'rank': 'family', 'rank_level': \\d+, 'iconic_taxon_id': \\d+, 'ancestor_ids': [\\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+], 'is_active': True, 'name': ')[^']+")
+
+		)%>%
+	mutate(
+		family_guess = str_replace(family_guess, ".*'name': '", "")
+
+		)
+}
