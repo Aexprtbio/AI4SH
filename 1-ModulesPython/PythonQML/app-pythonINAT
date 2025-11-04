@@ -1,5 +1,4 @@
 import sys
-import random
 from PySide6 import QtWidgets, QtCore
 
 class MyWidget(QtWidgets.QWidget):
@@ -17,27 +16,47 @@ class MyWidget(QtWidgets.QWidget):
         self.text = QtWidgets.QLabel("Hello World",
                                      alignment=QtCore.Qt.AlignCenter)
 
+        # Champs texte cachés au départ
+        self.input1 = QtWidgets.QLineEdit()
+        self.input2 = QtWidgets.QLineEdit()
+        self.input3 = QtWidgets.QLineEdit()
+        self.input1.hide()
+        self.input2.hide()
+        self.input3.hide()
+
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.button1)
+        self.layout.addWidget(self.input1)
         self.layout.addWidget(self.button2)
+        self.layout.addWidget(self.input2)
         self.layout.addWidget(self.button3)
+        self.layout.addWidget(self.input3)
 
-        self.button1.clicked.connect(self.magic1)
-        self.button2.clicked.connect(self.magic2)
-        self.button3.clicked.connect(self.magic3)
-
-    @QtCore.Slot()
-    def magic1(self):
-        self.text.setText(random.choice(self.hello1))
+        self.button1.clicked.connect(self.show_input1)
+        self.button2.clicked.connect(self.show_input2)
+        self.button3.clicked.connect(self.show_input3)
 
     @QtCore.Slot()
-    def magic2(self):
-        self.text.setText(random.choice(self.hello2))
+    def show_input1(self):
+        self.input1.show()
+        self.input1.setFocus()
+        self.input2.hide()
+        self.input3.hide()
 
     @QtCore.Slot()
-    def magic3(self):
-        self.text.setText(random.choice(self.hello3))
+    def show_input2(self):
+        self.input2.show()
+        self.input2.setFocus()
+        self.input1.hide()
+        self.input3.hide()
+
+    @QtCore.Slot()
+    def show_input3(self):
+        self.input3.show()
+        self.input3.setFocus()
+        self.input1.hide()
+        self.input2.hide()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
