@@ -9,10 +9,10 @@ class MyWidget(QtWidgets.QWidget):
         self.hello2 = ["Bonjour", "Ciao", "Hallo", "Olá"]
         self.hello3 = ["Hello", "Hey", "Hi", "Howdy"]
 
-        self.button1 = QtWidgets.QPushButton("Bouton 1")
-        self.button2 = QtWidgets.QPushButton("Bouton 2")
-        self.button3 = QtWidgets.QPushButton("Bouton 3")
-        self.submit_button = QtWidgets.QPushButton("Valider")
+        self.button1 = QtWidgets.QPushButton("Retrieve observations by taxon id")
+        self.button2 = QtWidgets.QPushButton("Retrieve observations by project id")
+        self.button3 = QtWidgets.QPushButton("Retrieve observations by user id")
+        self.submit_button = QtWidgets.QPushButton("Submit")
 
         self.text = QtWidgets.QLabel("Hello World",
                                      alignment=QtCore.Qt.AlignCenter)
@@ -67,11 +67,31 @@ class MyWidget(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def get_input_text(self):
-        if self.current_input:
-            text = self.current_input.text()
-            self.text.setText(f"Texte saisi : {text}")
+        if self.button1.clicked:
+            if self.input1:
+                text = self.current_input.text()
+                self.text.setText(f"Taxon identifier : {text} - Confirm ?")
+            else:
+                self.text.setText("No identifier inputted")
+
+
+        if self.button2.clicked:
+            if self.current_input:
+                text = self.current_input.text()
+                self.text.setText(f"Project identifier : {text} - Confirm ?")
+            else:
+                self.text.setText("No identifier inputted")
+
         else:
-            self.text.setText("Aucun champ actif")
+            if self.current_input:
+                text = self.current_input.text()
+                self.text.setText(f"User identifier : {text} - Confirm ?")
+            else:
+                self.text.setText("No identifier inputted")
+
+
+
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
