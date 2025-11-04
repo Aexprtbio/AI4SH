@@ -12,11 +12,11 @@ class MyWidget(QtWidgets.QWidget):
         self.button1 = QtWidgets.QPushButton("Bouton 1")
         self.button2 = QtWidgets.QPushButton("Bouton 2")
         self.button3 = QtWidgets.QPushButton("Bouton 3")
+        self.submit_button = QtWidgets.QPushButton("Valider")
 
         self.text = QtWidgets.QLabel("Hello World",
                                      alignment=QtCore.Qt.AlignCenter)
 
-        # Champs texte cachés au départ
         self.input1 = QtWidgets.QLineEdit()
         self.input2 = QtWidgets.QLineEdit()
         self.input3 = QtWidgets.QLineEdit()
@@ -32,10 +32,14 @@ class MyWidget(QtWidgets.QWidget):
         self.layout.addWidget(self.input2)
         self.layout.addWidget(self.button3)
         self.layout.addWidget(self.input3)
+        self.layout.addWidget(self.submit_button)
 
         self.button1.clicked.connect(self.show_input1)
         self.button2.clicked.connect(self.show_input2)
         self.button3.clicked.connect(self.show_input3)
+        self.submit_button.clicked.connect(self.get_input_text)
+
+        self.current_input = None  # Pour suivre quel input est visible
 
     @QtCore.Slot()
     def show_input1(self):
@@ -43,6 +47,7 @@ class MyWidget(QtWidgets.QWidget):
         self.input1.setFocus()
         self.input2.hide()
         self.input3.hide()
+        self.current_input = self.input1
 
     @QtCore.Slot()
     def show_input2(self):
@@ -50,6 +55,7 @@ class MyWidget(QtWidgets.QWidget):
         self.input2.setFocus()
         self.input1.hide()
         self.input3.hide()
+        self.current_input = self.input2
 
     @QtCore.Slot()
     def show_input3(self):
@@ -57,6 +63,15 @@ class MyWidget(QtWidgets.QWidget):
         self.input3.setFocus()
         self.input1.hide()
         self.input2.hide()
+        self.current_input = self.input3
+
+    @QtCore.Slot()
+    def get_input_text(self):
+        if self.current_input:
+            text = self.current_input.text()
+            self.text.setText(f"Texte saisi : {text}")
+        else:
+            self.text.setText("Aucun champ actif")
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
