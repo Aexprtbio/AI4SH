@@ -1,0 +1,46 @@
+import sys
+import random
+from PySide6 import QtWidgets, QtCore
+
+class MyWidget(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.hello1 = ["Hallo Welt", "Hei maailma", "Hola Mundo", "Привет мир"]
+        self.hello2 = ["Bonjour", "Ciao", "Hallo", "Olá"]
+        self.hello3 = ["Hello", "Hey", "Hi", "Howdy"]
+
+        self.button1 = QtWidgets.QPushButton("Bouton 1")
+        self.button2 = QtWidgets.QPushButton("Bouton 2")
+        self.button3 = QtWidgets.QPushButton("Bouton 3")
+
+        self.text = QtWidgets.QLabel("Hello World",
+                                     alignment=QtCore.Qt.AlignCenter)
+
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(self.text)
+        self.layout.addWidget(self.button1)
+        self.layout.addWidget(self.button2)
+        self.layout.addWidget(self.button3)
+
+        self.button1.clicked.connect(self.magic1)
+        self.button2.clicked.connect(self.magic2)
+        self.button3.clicked.connect(self.magic3)
+
+    @QtCore.Slot()
+    def magic1(self):
+        self.text.setText(random.choice(self.hello1))
+
+    @QtCore.Slot()
+    def magic2(self):
+        self.text.setText(random.choice(self.hello2))
+
+    @QtCore.Slot()
+    def magic3(self):
+        self.text.setText(random.choice(self.hello3))
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    widget = MyWidget()
+    widget.show()
+    sys.exit(app.exec())
