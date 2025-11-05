@@ -3,7 +3,7 @@ working on the AI4SH initiative
 Description of folders :
 
 ## 1-ModulesPython/inatuapi
-<img width="53" height="53" alt="iNatuAPI-logo_png" src="https://github.com/user-attachments/assets/106811ea-fbe4-46c3-b74b-788336a6dac6" />
+<img width="100" height="100" alt="iNatuAPI-logo_png" src="https://github.com/user-attachments/assets/106811ea-fbe4-46c3-b74b-788336a6dac6" />
 
 
 Python script / Module for retrievinga DataFrame of iNaturalist observations.
@@ -25,9 +25,9 @@ Later will be developped a Graphical User Friendly Interface to access to these 
 Folder containing specific data from the LUKE team in Finland, coordinated by Elo Riikka.
 
 
-<img width="53" height="53" alt="soilFarilogo_png" src="https://github.com/user-attachments/assets/6b3c1969-0fc6-4991-b594-eb03c4a3f11f" />
-
 ## 3-SoilFariR
+<img width="100" height="100" alt="soilFarilogo_png" src="https://github.com/user-attachments/assets/6b3c1969-0fc6-4991-b594-eb03c4a3f11f" />
+
 R scripts applied to the 'SoilFari' results. 
 The script 'SoilFariR_functions.R' contains the definition of functions necessary to processing dataframes and getting key elements for base and further analysis.
 
