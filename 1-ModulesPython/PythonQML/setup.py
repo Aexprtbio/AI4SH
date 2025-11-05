@@ -12,7 +12,8 @@ executables = [
   
 buildOptions = dict( 
         includes = ["inatuapi_module","pandas","PySide6", "requests"],
-        include_files = ["readme_inatapi.txt", "inatapi.ico"]
+        include_files = ["readme_inatapi.txt", "inatapi.ico",
+        ('C:/Users/PRETAT/anaconda3/envs/torch13/Library/lib/qt6/plugins/platforms', 'platforms')]
 )
   
 setup(
