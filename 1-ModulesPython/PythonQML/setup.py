@@ -2,15 +2,17 @@
 # python setup.py build
 
 from cx_Freeze import setup, Executable
-  
+import os 
+
+os.chdir('D:/GitHub/AI4SH/1-ModulesPython/PythonQML')
 executables = [
-        Executable(script = "D:/GitHub/AI4SH/1-ModulesPython/PythonQML/app-pythonINAT.py",icon = "D:/GitHub/AI4SH/1-ModulesPython/PythonQML/inatapi.ico", base = "Win32GUI" )
+        Executable(script = "app-pythonINAT.py",icon = "inatapi.ico", base = "Win32GUI" )
 ]
 # ne pas mettre "base = ..." si le programme n'est pas en mode graphique, comme c'est le cas pour chiffrement.py.
   
 buildOptions = dict( 
-        includes = ["inatuapi_module","pandas"],
-        include_files = ["D:/GitHub/AI4SH/1-ModulesPython/PythonQML/readme_inatapi.txt", "D:/GitHub/AI4SH/1-ModulesPython/PythonQML/inatapi.ico"]
+        includes = ["inatuapi_module","pandas","PySide6", "requests"],
+        include_files = ["readme_inatapi.txt", "inatapi.ico"]
 )
   
 setup(
