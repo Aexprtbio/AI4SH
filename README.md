@@ -1,6 +1,6 @@
 # AI4SH
 working on the AI4SH initiative
-
+<img width="535" height="535" alt="soilFarilogo_png" src="https://github.com/user-attachments/assets/6b3c1969-0fc6-4991-b594-eb03c4a3f11f" />
 Description of folders :
 
 ## 1-ModulesPython/inatuapi
@@ -35,3 +35,4 @@ The folder for the usable and processed DataFrames to import in 'SoilFariR_scrip
 
 ## 5-DataFrames_transients
 Transitory dataframes created during the first steps of development.
+
