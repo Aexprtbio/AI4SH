@@ -1,4 +1,8 @@
 import sys
+import os
+
+os.chdir('/Users/alexpretat/AI4SH/1-ModulesPython/')
+
 from PySide6 import QtWidgets, QtCore
 from inatuapi_module import getobs_bytax, getobs_proj, getobs_us
 import pandas as pd
@@ -46,7 +50,7 @@ class inatuapi(QtWidgets.QWidget):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-image: url(D:/GitHub/AI4SH/7-Logos/{image_path});
+                background-image: url(/AI4SH/7-Logos/{image_path});
                 background-repeat: no-repeat;
                 background-position: center;
             }}
