@@ -1,7 +1,7 @@
 import sys
 import os
 
-os.chdir('/Users/alexpretat/AI4SH/1-ModulesPython/')
+#os.chdir('/Users/alexpretat/AI4SH/1-ModulesPython/')
 
 from PySide6 import QtWidgets, QtCore
 from inatuapi_module import getobs_bytax, getobs_proj, getobs_us
@@ -50,32 +50,36 @@ class inatuapi(QtWidgets.QWidget):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-image: url(/AI4SH/7-Logos/{image_path});
+                background-image: url(D:/GitHub/AI4SH/7-Logos/{image_path});
                 background-repeat: no-repeat;
                 background-position: center;
             }}
             """
         )
-        self.input1 = QtWidgets.QLineEdit()
-        self.input2 = QtWidgets.QLineEdit()
-        self.input3 = QtWidgets.QLineEdit()
-        self.input1.hide()
-        self.input2.hide()
-        self.input3.hide()
+        self.taxon_id = QtWidgets.QLineEdit("enter taxon identifier")
+        self.project_id = QtWidgets.QLineEdit()
+        self.user_id = QtWidgets.QLineEdit()
+        self.country = QtWidgets.QLineEdit()
+        self.taxon_id.hide()
+        self.project_id.hide()
+        self.user_id.hide()
+        self.country.hide()
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.button1)
-        self.layout.addWidget(self.input1)
+        self.layout.addWidget(self.taxon_id)
+        self.layout.addWidget(self.country)
+
         self.layout.addWidget(self.button2)
-        self.layout.addWidget(self.input2)
+        self.layout.addWidget(self.project_id)
         self.layout.addWidget(self.button3)
-        self.layout.addWidget(self.input3)
+        self.layout.addWidget(self.user_id)
         self.layout.addWidget(self.submit_button)
 
-        self.button1.clicked.connect(self.show_input1)
-        self.button2.clicked.connect(self.show_input2)
-        self.button3.clicked.connect(self.show_input3)
+        self.button1.clicked.connect(self.show_taxon_id)
+        self.button2.clicked.connect(self.show_project_id)
+        self.button3.clicked.connect(self.show_user_id)
         self.submit_button.clicked.connect(self.get_input_text)
 
         self.resize(500, 300)  # Size matters
@@ -85,30 +89,38 @@ class inatuapi(QtWidgets.QWidget):
         self.NewWindow = None # Garder une référence
 
     @QtCore.Slot()
-    def show_input1(self):
-        self.input1.show()
-        self.input1.setFocus()
-        self.input2.hide()
-        self.input3.hide()
-        self.current_input = self.input1
+    def show_country(self):
+        self.country.show()
+        self.country.setFocus()
+        self.project_id.hide()
+        self.user_id.hide()
+        self.current_input = self.taxon_id
+
+    @QtCore.Slot()
+    def show_taxon_id(self):
+        self.taxon_id.show()
+        self.taxon_id.setFocus()
+        self.project_id.hide()
+        self.user_id.hide()
+        self.current_input = self.taxon_id
         self.current_input_id = 1
 
     @QtCore.Slot()
-    def show_input2(self):
-        self.input2.show()
-        self.input2.setFocus()
-        self.input1.hide()
-        self.input3.hide()
-        self.current_input = self.input2
+    def show_project_id(self):
+        self.project_id.show()
+        self.project_id.setFocus()
+        self.taxon_id.hide()
+        self.user_id.hide()
+        self.current_input = self.project_id
         self.current_input_id = 2
 
     @QtCore.Slot()
-    def show_input3(self):
-        self.input3.show()
-        self.input3.setFocus()
-        self.input1.hide()
-        self.input2.hide()
-        self.current_input = self.input3
+    def show_user_id(self):
+        self.user_id.show()
+        self.user_id.setFocus()
+        self.taxon_id.hide()
+        self.project_id.hide()
+        self.current_input = self.user_id
         self.current_input_id = 3
 
     @QtCore.Slot()

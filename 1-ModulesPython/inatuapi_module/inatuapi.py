@@ -21,7 +21,7 @@ import numpy as np
 ##############################
 # Lets get obs by taxon_id
 
-def getobs_bytax(list_id, per_page=200, country=[], region=[]):
+def getobs_bytax(list_id, per_page=200, country=None, region=None):
     base_url=f'https://api.inaturalist.org/v1/identifications?list_id={list_id}&order=desc'
     params = {
         'per_page': per_page,
