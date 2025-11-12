@@ -22,10 +22,8 @@ def check_internet(url="http://www.google.com"):
     try:
         requests.get(url, timeout=5)
         return True
-        print("Connection established")
     except:
         return False
-        print("No internet connection, please check your device")
 
 
 check_internet()
