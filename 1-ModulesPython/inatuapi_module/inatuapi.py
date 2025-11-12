@@ -18,6 +18,18 @@ import pandas as pd
 import numpy as np
 
 
+def check_internet(url="http://www.google.com"):
+    try:
+        requests.get(url, timeout=5)
+        return True
+        print("Connection established")
+    except:
+        return False
+        print("No internet connection, please check your device")
+
+
+check_internet()
+
 ##############################
 # Lets get obs by taxon_id
 
