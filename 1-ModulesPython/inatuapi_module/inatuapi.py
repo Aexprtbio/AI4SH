@@ -1,7 +1,7 @@
 ### CREATED BY ALEXI PRETAT
 # 1/04/2025
 
-# LAST UPDATE : 10/05/2025
+# LAST UPDATE : 12/11/2025
 
 # open shell in panel
 # source AlexPI/bin/activate
@@ -26,7 +26,6 @@ def check_internet(url="http://www.google.com"):
         return False
 
 
-check_internet()
 
 ##############################
 # Lets get obs by taxon_id
