@@ -33,22 +33,22 @@ check_internet()
 ##############################
 # Lets get obs by taxon_id
 
-def getobs_bytax(list_id, per_page=200, country=None, region=None):
-    base_url=f'https://api.inaturalist.org/v1/identifications?list_id={list_id}&order=desc'
+def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
+    base_url=f'https://api.inaturalist.org/v1/observations?taxon_id={taxon_id}'
     params = {
         'per_page': per_page,
         'page': 1,
-        'list_id' : list_id
+        'taxon_id' : taxon_id
     }
 
-    name = []
+    all_observations = []
 
     while True:
         response = requests.get(base_url, params=params)
         data = response.json()
 
         # Ajouter les observations à la liste
-        name.extend(data['results'])
+        all_observations.extend(data['results'])
 
         # Vérifier s'il y a plus de pages
         if len(data['results']) < per_page:
@@ -58,18 +58,25 @@ def getobs_bytax(list_id, per_page=200, country=None, region=None):
         params['page'] += 1
 
     # Convertir les observations en DataFrame
-    name = pd.DataFrame(name)
-    if 'place_guess' in name.columns:
-        name['country']=name['place_guess'].apply(lambda x: x.split(',')[-1].strip())
-        name['region']=name['place_guess'].apply(lambda x: x.split(',')[-2].strip())
+    observations_df = pd.DataFrame(all_observations)
 
 
-    if country:
-        name = name[name['country'].isin(country)]
-    if region:
-        name = name[name['region'].isin(region)]
+    if country is not None:
+        if isinstance(country, str):
+            country=[country]
 
-    return name
+        observations_df['country']=observations_df['place_guess'].apply(lambda x: x.split(',')[-1].strip())
+        observations_df = observations_df[observations_df['country'].isin(country)]
+
+        
+    if region is not None:
+        if isinstance(country, str):
+            country=[country]
+        observations_df['region']=observations_df['place_guess'].apply(lambda x: x.split(',')[-2].strip())
+        observations_df = observations_df[observations_df['region'].isin(region)]
+
+
+    return observations_df
 
 
 print('\n -------------------------------')
