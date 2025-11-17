@@ -17,6 +17,7 @@ import requests
 from requests.adapters import HTTPAdapter
 import pandas as pd
 import numpy as np
+import time
 from tqdm import trange
 from urllib3.util.retry import Retry
 
