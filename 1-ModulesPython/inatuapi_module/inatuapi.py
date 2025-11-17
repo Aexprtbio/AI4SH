@@ -77,28 +77,26 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
             time.sleep(1)
         
         if len(data['results']) < per_page:
-            break
-    # Convertir les observations en DataFrame
-    observations_df = pd.DataFrame(all_observations)
+            break    
 
 
     if country is not None:
         if isinstance(country, str):
             country=[country]
 
-        observations_df['country']=observations_df['place_guess'].apply(lambda x: x.split(',')[-1].strip())
-        observations_df = observations_df[observations_df['country'].isin(country)]
+        all_observations['country']=all_observations['place_guess'].apply(lambda x: x.split(',')[-1].strip())
+        all_observations = all_observations[all_observations['country'].isin(country)]
 
         
     if region is not None:
         if isinstance(country, str):
             country=[country]
-        observations_df['region']=observations_df['place_guess'].apply(lambda x: x.split(',')[-2].strip())
-        observations_df = observations_df[observations_df['region'].isin(region)]
+        all_observations['region']=all_observations['place_guess'].apply(lambda x: x.split(',')[-2].strip())
+        all_observations = all_observations[all_observations['region'].isin(region)]
 
         #final recomposition of the dataframe before returning results
-    observations_df[["latitude", "longitude"]]=observations_df["location"].str.split(",", expand=True)
-    return observations_df
+    all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
+    return all_observations
 
 
 print('\n -------------------------------')
