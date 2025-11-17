@@ -72,7 +72,7 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
                 print("Erreur dans la réponse API :", data)
                 break
             # Ajouter les observations à la liste
-            all_observations.extend(data['results'])
+            all_observations.extend(pd.DataFrame(data['results']))
 
             time.sleep(1)
         
@@ -84,14 +84,14 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
         if isinstance(country, str):
             country=[country]
 
-        all_observations['country']=all_observations['place_guess'].apply(lambda x: x.split(',')[-1].strip())
+        all_observations['country']=all_observations[['place_guess']].apply(lambda x: x.split(',')[-1].strip())
         all_observations = all_observations[all_observations['country'].isin(country)]
 
         
     if region is not None:
-        if isinstance(country, str):
-            country=[country]
-        all_observations['region']=all_observations['place_guess'].apply(lambda x: x.split(',')[-2].strip())
+        if isinstance(region, str):
+            region=[region]
+        all_observations['region']=all_observations[['place_guess']].apply(lambda x: x.split(',')[-2].strip())
         all_observations = all_observations[all_observations['region'].isin(region)]
 
         #final recomposition of the dataframe before returning results
