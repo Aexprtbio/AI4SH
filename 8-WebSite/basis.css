@@ -1,0 +1,69 @@
+/* --- Police "system" & fond du bureau --- */
+body {
+  font-family: Tahoma, Verdana, Segoe UI, sans-serif;
+  background: #008080;
+  color: #222;
+}
+
+/* --- Fenêtre principale --- */
+.xp-window {
+  width: 420px;
+  border: 2px solid #eeffaaff;
+  background: #e9e7e3;
+  box-shadow: 4px 4px 0 #2224;
+  border-radius: 0;
+  margin: 40px auto;
+  position: relative;
+}
+
+/* --- Barre de titre bleue --- */
+.xp-titlebar {
+  background: linear-gradient(90deg, #44aa00ff 0%, #506926ff 100%);
+  color: #fff;
+  padding: 6px 10px;
+  font-weight: bold;
+  font-size: 1.1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #66ff00;
+}
+
+/* --- Boutons de fenêtre (min/max/fermer) --- */
+.xp-titlebar .xp-buttons {
+  display: flex;
+  gap: 5px;
+}
+.xp-btn {
+  width: 18px;
+  height: 18px;
+  box-shadow: inset 1px 1px 0 #fff8, inset -1px -1px 1px #5555;
+  border: 1px solid #888;
+  border-radius: 0;
+  background: #e9e7e3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: bold;
+  color: #444;
+}
+.xp-btn:hover {
+  background: #e7c873;
+  border: 1px solid #d7ad00;
+}
+
+/* --- Contenu de fenêtre --- */
+.xp-content {
+  padding: 24px 16px 16px 16px;
+  font-size: 1em;
+  color: #222;
+}
+
+/* --- Bordure pied de fenêtre --- */
+.xp-window:after {
+  content: "";
+  display: block;
+  border-top: 2px solid #b9b9b9;
+}
