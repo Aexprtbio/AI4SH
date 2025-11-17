@@ -72,7 +72,8 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
         observations_df['region']=observations_df['place_guess'].apply(lambda x: x.split(',')[-2].strip())
         observations_df = observations_df[observations_df['region'].isin(region)]
 
-
+        #final recomposition of the dataframe before returning results
+    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
     return observations_df
 
 
@@ -148,6 +149,8 @@ def getobs_proj(project_id, per_page=200):
 
     # Convertir les observations en DataFrame
     observations_df = pd.DataFrame(all_observations)
+    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
+
     return observations_df
 
 

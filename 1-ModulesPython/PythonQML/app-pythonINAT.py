@@ -125,17 +125,21 @@ class inatuapi(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def get_input_text(self):
+        # detailing what function is called depnding on the input text
+
         if self.current_input_id==1:
             text = self.current_input.text()
             self.text.setText(f"Taxon identifier : {text}")
             self.text.setStyleSheet("color: green;")
+            
+            df = getobs_bytax(text)
 
 
             self.new_window = NewWindow(text)
             self.new_window.show()
 
 
-
+        #For project id function
 
         elif self.current_input_id==2:
             text = self.current_input.text()
@@ -147,13 +151,18 @@ class inatuapi(QtWidgets.QWidget):
             self.new_window = NewWindow(text, df)
             self.new_window.show()
 
+        #For user id
+
         elif self.current_input_id==3:
             text = self.current_input.text()
             self.text.setText(f"User identifier : {text}")
             self.text.setStyleSheet("color: green;")
+            df = getobs_us(text)
 
             self.new_window = NewWindow(text)
             self.new_window.show()
+
+        #fails gracefully if no text input to run function
 
         else:
             self.text.setText("No identifier inputted")
