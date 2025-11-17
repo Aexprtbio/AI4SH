@@ -44,6 +44,11 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
         response = requests.get(base_url, params=params)
         data = response.json()
 
+        # Vérification présence de la clé 'results'
+        if 'results' not in data:
+            print("Erreur dans la réponse API :", data)
+            break
+
         # Ajouter les observations à la liste
         all_observations.extend(data['results'])
 
