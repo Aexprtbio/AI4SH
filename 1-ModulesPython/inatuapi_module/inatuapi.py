@@ -14,9 +14,11 @@ print(sys.path)
 print('\n -------------------------------')
 
 import requests
+from requests.adapters import HTTPAdapter
 import pandas as pd
 import numpy as np
-
+from tqdm import trange
+from urllib3.util.retry import Retry
 
 def check_internet(url="http://www.google.com"):
     try:
@@ -35,30 +37,46 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
     params = {
         'per_page': per_page,
         'page': 1,
-        'taxon_id' : taxon_id
+        'taxon_id' : taxon_id,
+        'order': 'asc'
     }
 
     all_observations = []
+    session = requests.Session()
+    retries = Retry(total=5, backoff_factor=1,
+        status_forcelist=[502, 503, 504, 522, 524, 408])
+    adapter = HTTPAdapter(max_retries=retries)
+    session.mount('https://', adapter)
 
     while True:
         response = requests.get(base_url, params=params)
         data = response.json()
+        
 
-        # Vérification présence de la clé 'results'
-        if 'results' not in data:
-            print("Erreur dans la réponse API :", data)
-            break
 
-        # Ajouter les observations à la liste
-        all_observations.extend(data['results'])
+        if 'total_results' in data:
+            total=data['total_results']
+            n_page=int(total/per_page) + (total%per_page>0)
+        else:
+            n_page=1
 
-        # Vérifier s'il y a plus de pages
+        #progression bar
+        for page in trange(1,n_page+1, desc="Downloading"):
+            params['page']=page
+            response = requests.get(base_url, params=params)
+            data = response.json()
+
+            # Vérification présence de la clé 'results'
+            if 'results' not in data:
+                print("Erreur dans la réponse API :", data)
+                break
+            # Ajouter les observations à la liste
+            all_observations.extend(data['results'])
+
+            time.sleep(1)
+        
         if len(data['results']) < per_page:
             break
-
-        # Passer à la page suivante
-        params['page'] += 1
-
     # Convertir les observations en DataFrame
     observations_df = pd.DataFrame(all_observations)
 
@@ -78,7 +96,7 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
         observations_df = observations_df[observations_df['region'].isin(region)]
 
         #final recomposition of the dataframe before returning results
-    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
+    observations_df[["latitude", "longitude"]]=observations_df["location"].str.split(",", expand=True)
     return observations_df
 
 
