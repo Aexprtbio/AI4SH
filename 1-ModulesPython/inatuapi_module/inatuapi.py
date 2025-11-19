@@ -33,7 +33,7 @@ def check_internet(url="http://www.google.com"):
 ##############################
 # Lets get obs by taxon_id
 
-def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
+def getobs_bytax(progress_signal, taxon_id, per_page=200, country=None, region=None):
     base_url=f'https://api.inaturalist.org/v1/observations?taxon_id={taxon_id}'
     params = {
         'per_page': per_page,
@@ -66,6 +66,7 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
             params['page']=page
             response = requests.get(base_url, params=params)
             data = response.json()
+            progress_signal.emit(page, n_page)
 
             # Vérification présence de la clé 'results'
             if 'results' not in data:
@@ -95,7 +96,7 @@ def getobs_bytax(taxon_id, per_page=200, country=None, region=None):
         all_observations = all_observations[all_observations['region'].isin(region)]
 
         #final recomposition of the dataframe before returning results
-    all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
+    #all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
     return all_observations
 
 
@@ -104,9 +105,7 @@ print('Function getobs_bytax loaded')
 
 ####---------------------------------------------------------------------------------------
 #### GET BY USER to fetch observations
-import requests
-import pandas as pd
-import numpy as np
+
 
 def getobs_us(user_id, per_page=200):
     base_url=f'https://api.inaturalist.org/v1/observations?user_id={user_id}'
@@ -171,7 +170,7 @@ def getobs_proj(project_id, per_page=200):
 
     # Convertir les observations en DataFrame
     observations_df = pd.DataFrame(all_observations)
-    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
+    #observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
 
     return observations_df
 

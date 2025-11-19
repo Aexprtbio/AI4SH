@@ -6,6 +6,7 @@ import os
 from PySide6 import QtWidgets, QtCore
 from inatuapi_module import getobs_bytax, getobs_proj, getobs_us
 import pandas as pd
+from tqdm import trange
 
 class NewWindow(QtWidgets.QWidget):
     def __init__(self, text, data=None, parent=None):
@@ -17,8 +18,9 @@ class NewWindow(QtWidgets.QWidget):
         self.resize(300, 100)
 
         if data is not None:
+
             table = self.dataframe_to_table(data)
-            layout.addWidget(table)
+            self.layout.addWidget(table)
 
     def dataframe_to_table(self, df):
         table = QtWidgets.QTableWidget()
@@ -130,13 +132,13 @@ class inatuapi(QtWidgets.QWidget):
         if self.current_input_id==1:
             text = self.current_input.text()
             self.text.setText(f"Taxon identifier : {text}")
-            self.text.setStyleSheet("color: green;")
-            
-            df = getobs_bytax(text)
 
+
+            df = getobs_bytax(text)
 
             self.new_window = NewWindow(text)
             self.new_window.show()
+
 
 
         #For project id function
