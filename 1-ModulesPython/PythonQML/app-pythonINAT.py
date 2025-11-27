@@ -16,11 +16,16 @@ class NewWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(label)
         self.resize(300, 100)
+        self.save_btn = QtWidgets.QPushButton("Save DataFrame")
+        self.save_btn.setEnabled(False)
 
         if data is not None:
 
             table = self.dataframe_to_table(data)
-            self.layout.addWidget(table)
+            layout.addWidget(self.save_btn)
+            self.save_btn.setEnabled(True)
+            self.save_btn.clicked.connect(self.save_dataframe)
+            layout.addWidget(table)
 
     def dataframe_to_table(self, df):
         table = QtWidgets.QTableWidget()
@@ -32,6 +37,16 @@ class NewWindow(QtWidgets.QWidget):
                 table.setItem(i, j, QtWidgets.QTableWidgetItem(str(value)))
         table.resizeColumnsToContents()
         return table
+
+    def save_dataframe(self, table):
+        if self.table is not None:
+            path, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Save as ...", "", "CSV (*.csv)")
+            if path:
+                table.pd.DataFrame.to_csv(path, index=False)
+                QtWidgets.QMessageBox.information(self, "Exporting", f"DataFrame saved in: \n{path}")
+            else:
+                QtWidgets.QMessageBox.warning(self, "error", "No Data to export")
+
 
 class inatuapi(QtWidgets.QWidget):
     def __init__(self):
