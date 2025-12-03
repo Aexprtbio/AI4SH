@@ -12,6 +12,7 @@ class NewWindow(QtWidgets.QWidget):
     def __init__(self, text, data=None, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Gathering your data...")
+        self.df=None
         label = QtWidgets.QLabel(f"Input Identifier : {text}")
         layout = QtWidgets.QVBoxLayout(self)
         layout.addWidget(label)
@@ -27,22 +28,22 @@ class NewWindow(QtWidgets.QWidget):
             self.save_btn.clicked.connect(self.save_dataframe)
             layout.addWidget(table)
 
-    def dataframe_to_table(self, df):
+    def dataframe_to_table(self, data):
         table = QtWidgets.QTableWidget()
-        table.setRowCount(len(df))
-        table.setColumnCount(len(df.columns))
-        table.setHorizontalHeaderLabels(df.columns.astype(str).tolist())
-        for i, row in enumerate(df.values):
+        table.setRowCount(len(data))
+        table.setColumnCount(len(data.columns))
+        table.setHorizontalHeaderLabels(data.columns.astype(str).tolist())
+        for i, row in enumerate(data.values):
             for j, value in enumerate(row):
                 table.setItem(i, j, QtWidgets.QTableWidgetItem(str(value)))
         table.resizeColumnsToContents()
         return table
 
-    def save_dataframe(self, table):
-        if self.table is not None:
+    def save_dataframe(self, data):
+        if data is not None:
             path, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Save as ...", "", "CSV (*.csv)")
             if path:
-                table.pd.DataFrame.to_csv(path, index=False)
+                self.df.to_csv(path, index=False)
                 QtWidgets.QMessageBox.information(self, "Exporting", f"DataFrame saved in: \n{path}")
             else:
                 QtWidgets.QMessageBox.warning(self, "error", "No Data to export")
@@ -151,7 +152,7 @@ class inatuapi(QtWidgets.QWidget):
 
             df = getobs_bytax(text)
 
-            self.new_window = NewWindow(text)
+            self.new_window = NewWindow(text, df)
             self.new_window.show()
 
 
@@ -176,7 +177,7 @@ class inatuapi(QtWidgets.QWidget):
             self.text.setStyleSheet("color: green;")
             df = getobs_us(text)
 
-            self.new_window = NewWindow(text)
+            self.new_window = NewWindow(text, df)
             self.new_window.show()
 
         #fails gracefully if no text input to run function

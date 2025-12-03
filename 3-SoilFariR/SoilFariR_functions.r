@@ -122,7 +122,7 @@ gettransect <- function(dataset) {
 #############################################################
 # Build a function to get the order in which samples are found
 
-getorder <- function(dataset){
+get.sorder <- function(dataset){
 	dataset <- dataset %>%
 		mutate(
 			sample_order = ifelse(
@@ -181,8 +181,11 @@ milieu <- function(dataset) {
 
 ############################################################
 # Get latin name for the species_guess on iNaturalist
+library(jsonlite)
+library(dplyr)
 
-getspecies <- function(dataset){
+
+get.species <- function(dataset){
 	dataset<-dataset %>%
 	mutate(
 		species_guess = str_extract(identifications, "('min_species_taxon_id': \\d+, 'name': ')[^']+")
@@ -195,14 +198,83 @@ getspecies <- function(dataset){
 		)
 }
 
-getfamily <- function(dataset){
-	dataset<-dataset %>%
-	mutate(
-		family_guess = str_extract(identifications, "{'id': \\d+, 'rank': 'family', 'rank_level': \\d+, 'iconic_taxon_id': \\d+, 'ancestor_ids': [\\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+, \\d+], 'is_active': True, 'name': ')[^']+")
+library(dplyr)
+library(purrr)
+library(jsonlite)
+library(stringr)
 
-		)%>%
-	mutate(
-		family_guess = str_replace(family_guess, ".*'name': '", "")
+get.family <- function(dataset) {
+  dataset <- dataset %>%
+    mutate(
+      # 1. Convertir en chaîne de caractères
+      ident_json = as.character(identifications),
 
-		)
+      # 2. Remplacer les valeurs Python par des valeurs JSON
+      ident_json = gsub("False", "false", ident_json),
+      ident_json = gsub("True", "true", ident_json),
+      ident_json = gsub("None", "null", ident_json),
+
+      # 3. Remplacer les quotes simples par des doubles quotes
+      ident_json = gsub("'", '"', ident_json),
+
+      # 4. Séparer chaque JSON individuel (chaque bloc entre crochets)
+      json_list = str_split(ident_json, "\\[|\\]"),
+
+      # 5. Nettoyer les éléments vides et parser chaque JSON
+      parsed = map(json_list, ~ {
+        # Filtrer les chaînes non vides
+        json_strings <- .x[nzchar(.x)]
+
+        # Parser chaque JSON individuel
+        map(json_strings, ~ {
+          tryCatch(
+            {
+              # Ajouter les crochets manquants pour reformer un JSON valide
+              json_str <- paste0("[", .x, "]")
+              fromJSON(json_str)
+            },
+            error = function(e) {
+              message("Erreur de parsing pour : ", substr(.x, 1, 100), "...")
+              NULL
+            }
+          )
+        })
+      }),
+
+      # 6. Extraire les ancêtres (pour chaque JSON parsé)
+      ancestors = map(parsed, ~ {
+        # Extraire les ancêtres de chaque JSON
+        map(.x, ~ {
+          if (!is.null(.x) && length(.x) > 0 && !is.null(.x[[1]]$taxon)) {
+            .x[[1]]$taxon$ancestors
+          } else {
+            list()
+          }
+        })
+      }),
+
+      # 7. Extraire le nom de la famille (pour chaque liste d'ancêtres)
+      family_guess = map_chr(ancestors, ~ {
+        # Prendre le premier ensemble d'ancêtres (si plusieurs JSONs)
+        first_ancestors <- .x[[1]]
+        family_entry <- first_ancestors[sapply(first_ancestors, function(y) y$rank == "family")]
+        if (length(family_entry) > 0) {
+          family_entry[[1]]$name
+        } else {
+          NA_character_
+        }
+      })
+    )
+
+  return(dataset)
+}
+
+# Assuming 'identifications' is a column of JSONs
+
+
+get.filter <- function(dataset){
+	dataset <- dataset %>%
+  filter(!is.na(identifications) & grepl("\\]$", identifications))
+
+
 }

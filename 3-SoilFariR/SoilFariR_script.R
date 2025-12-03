@@ -30,8 +30,15 @@ source('SoilFariR_functions.r')
 # import up to date DataFrame -------------------------------------------------------
 setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
+tsbf <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE)
+tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
 soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
+
+summary(tsbf_env)
 summary(soil)
+
+tsbf_j <- tsbf %>% 
+  left_join(tsbf_env, by="echantillon")
 
 ################################################################################
 # try plots ----------------------------------------------------------------------
@@ -72,6 +79,12 @@ soil <- soil %>%
 ###################################################################################################
 ###################################################################################################
 # RARE CURVE WITH VEGAN
+
+
+# On tsbf by students:
+commSt <- table(tsbf$etage, tsbf$ordre)
+x11()
+rarecurve(commSt, step=1)
 
 # ON GSMF TAXA
 
@@ -315,3 +328,53 @@ rarecurve(commu, step=1)
 tab2025 <- subset(soil, soil$observer=='Alex')
 commu2 <- table(tab2025$transect_id, tab2025$ident_taxon_ids)
 rarecurve(commu2, step=1)
+
+
+
+
+
+
+#############################################################
+#############################################################
+##
+## GESTION DU JSON
+library(stringr)
+
+# Exemple de chaîne JSON concaténée
+json_concatenated <- JASON
+
+# Séparer les objets JSON en utilisant une expression régulière
+json_objects <- unlist(str_split(json_concatenated, "(?<=\\])\\[(?=\\{)"))
+
+# Nettoyer chaque objet JSON pour ajouter les crochets manquants si nécessaire
+json_objects <- sapply(json_objects, function(x) {
+  if (grepl("^\\[", x) && grepl("\\]$", x)) {
+    return(x)
+  } else if (grepl("^\\[", x)) {
+    return(paste0(x, "]"))
+  } else if (grepl("\\]$", x)) {
+    return(paste0("[", x))
+  } else {
+    return(paste0("[", x, "]"))
+  }
+})
+
+
+library(jsonlite)
+library(purrr)
+
+# Parser chaque objet JSON
+parsed_objects <- map(json_objects, ~ {
+  tryCatch(
+    {
+      fromJSON(.x)
+    },
+    error = function(e) {
+      message("Erreur de parsing pour : ", substr(.x, 1, 100), "...")
+      return(NULL)
+    }
+  )
+})
+
+# Filtrer les objets NULL (ceux qui n'ont pas pu être parsés)
+parsed_objects <- parsed_objects[!sapply(parsed_objects, is.null)]
