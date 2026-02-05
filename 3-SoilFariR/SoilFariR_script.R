@@ -32,7 +32,7 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
 tsbf <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE)
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
-soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
+soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
 
 summary(tsbf_env)
 summary(soil)

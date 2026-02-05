@@ -207,7 +207,7 @@ get.family <- function(dataset) {
   dataset <- dataset %>%
     mutate(
       # 1. Convertir en chaîne de caractères
-      ident_json = as.character(identifications),
+      ident_json = (identifications),
 
       # 2. Remplacer les valeurs Python par des valeurs JSON
       ident_json = gsub("False", "false", ident_json),
@@ -230,7 +230,7 @@ get.family <- function(dataset) {
           tryCatch(
             {
               # Ajouter les crochets manquants pour reformer un JSON valide
-              json_str <- paste0("[", .x, "]")
+              json_str <- paste0("{", .x, "}")
               fromJSON(json_str)
             },
             error = function(e) {
@@ -239,30 +239,6 @@ get.family <- function(dataset) {
             }
           )
         })
-      }),
-
-      # 6. Extraire les ancêtres (pour chaque JSON parsé)
-      ancestors = map(parsed, ~ {
-        # Extraire les ancêtres de chaque JSON
-        map(.x, ~ {
-          if (!is.null(.x) && length(.x) > 0 && !is.null(.x[[1]]$taxon)) {
-            .x[[1]]$taxon$ancestors
-          } else {
-            list()
-          }
-        })
-      }),
-
-      # 7. Extraire le nom de la famille (pour chaque liste d'ancêtres)
-      family_guess = map_chr(ancestors, ~ {
-        # Prendre le premier ensemble d'ancêtres (si plusieurs JSONs)
-        first_ancestors <- .x[[1]]
-        family_entry <- first_ancestors[sapply(first_ancestors, function(y) y$rank == "family")]
-        if (length(family_entry) > 0) {
-          family_entry[[1]]$name
-        } else {
-          NA_character_
-        }
       })
     )
 
