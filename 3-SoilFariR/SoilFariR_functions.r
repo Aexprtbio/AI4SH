@@ -77,20 +77,20 @@ gettaxa <- function(dataset){
 	dataset <- dataset %>%
 		mutate(
 			taxa = case_when(
-				grepl("47118", ident_taxon_ids, ignore.case=TRUE) ~ 'd_araneae',
-				grepl("48147", ident_taxon_ids, ignore.case=TRUE) ~ 'd_isopoda',
-				grepl("47208", ident_taxon_ids, ignore.case=TRUE) ~ 'd_coleoptera',
-				grepl("49470", ident_taxon_ids, ignore.case=TRUE) ~ 'd_collembola',
-				grepl("1269340", ident_taxon_ids, ignore.case=TRUE) ~ 'd_ants',
-				grepl("61267", ident_taxon_ids, ignore.case=TRUE) ~ 'd_heteroptera',
-				grepl("47735", ident_taxon_ids, ignore.case=TRUE) ~ 'd_diplopoda',
-				grepl("49556", ident_taxon_ids, ignore.case=TRUE) ~ 'd_chilopoda',
-				grepl("62164", ident_taxon_ids, ignore.case=TRUE) ~ 'd_trichoptera',
-				grepl("47114", ident_taxon_ids, ignore.case=TRUE) ~ 'd_gastropoda',
-				grepl("47651", ident_taxon_ids, ignore.case=TRUE) ~ 'd_orthoptera',
-				grepl("1418362", ident_taxon_ids, ignore.case=TRUE) ~ 'd_earthworms',
-				grepl("81769", ident_taxon_ids, ignore.case=TRUE) ~ 'd_blattodea',
-				grepl("52788", ident_taxon_ids, ignore.case=TRUE) ~ 'd_acari',
+				grepl("47118", ident_taxon_ids, ignore.case=TRUE) ~ 'araneae',
+				grepl("48147", ident_taxon_ids, ignore.case=TRUE) ~ 'isopoda',
+				grepl("47208", ident_taxon_ids, ignore.case=TRUE) ~ 'coleoptera',
+				grepl("49470", ident_taxon_ids, ignore.case=TRUE) ~ 'collembola',
+				grepl("1269340", ident_taxon_ids, ignore.case=TRUE) ~ 'ants',
+				grepl("61267", ident_taxon_ids, ignore.case=TRUE) ~ 'heteroptera',
+				grepl("47735", ident_taxon_ids, ignore.case=TRUE) ~ 'diplopoda',
+				grepl("49556", ident_taxon_ids, ignore.case=TRUE) ~ 'chilopoda',
+				grepl("62164", ident_taxon_ids, ignore.case=TRUE) ~ 'trichoptera',
+				grepl("47114", ident_taxon_ids, ignore.case=TRUE) ~ 'gastropoda',
+				grepl("47651", ident_taxon_ids, ignore.case=TRUE) ~ 'orthoptera',
+				grepl("1418362", ident_taxon_ids, ignore.case=TRUE) ~ 'earthworm',
+				grepl("81769", ident_taxon_ids, ignore.case=TRUE) ~ 'blattodea',
+				grepl("52788", ident_taxon_ids, ignore.case=TRUE) ~ 'acari',
 
 				)
 			)

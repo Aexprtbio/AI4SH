@@ -1,7 +1,7 @@
 # CREATED ON 09 MAY 2025
 # PRÉTAT
 
-# Last update : 28/10/2025
+# Last update : 11/02/2026
 
 rm(list=ls())
 
@@ -30,15 +30,23 @@ source('SoilFariR_functions.r')
 # import up to date DataFrame -------------------------------------------------------
 setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
-tsbf <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE)
+tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
+tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
 soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
 
-summary(tsbf_env)
+summary(tsbf_rou)
+summary(tsbf_fin)
 summary(soil)
 
-tsbf_j <- tsbf %>% 
-  left_join(tsbf_env, by="echantillon")
+soil <- gettaxa(soil)
+
+#soil %>%
+#  separate
+
+tsbf_rou$vegetation="forest"
+
+
 
 ################################################################################
 # try plots ----------------------------------------------------------------------
@@ -47,10 +55,34 @@ boxplot(soil$time~soil$month) ## cool
 
 boxplot(soil$time~soil$observer)
 
+
+# Morphological diversity in TSBF Rouen
+p <- ggplot(tsbf_rou, aes(y=gsmf_taxa, fill=gsmf_taxa))
+p + geom_bar(stat="count")+
+coord_polar("y", start=0)+
+theme_minimal()
+
+# Morphological diversity in TSBF Finlande
+x11()
+pf <- ggplot(tsbf_fin, aes(y=gsmf_taxa, fill=gsmf_taxa))
+pf + geom_bar(stat="count")+
+coord_polar("y", start=0)+
+theme_minimal()
+
+
+# Morphological diversity in Safari GLOBAL
+x11()
+ps <- ggplot(soil, aes(y=taxa, fill=taxa))
+ps + geom_bar(stat="count")+
+coord_polar("y", start=0)+
+theme_minimal()
+
+
+
 # and remove outliers / non-macrofauna ------------------------------------------
 
-soil <- subset(soil, soil$taxa != ('d_acari'))
-soil <- subset(soil, soil$taxa != ('d_collembola'))
+#soil <- subset(soil, soil$taxa != ('d_acari'))
+#soil <- subset(soil, soil$taxa != ('d_collembola'))
 soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
@@ -80,19 +112,22 @@ soil <- soil %>%
 ###################################################################################################
 # RARE CURVE WITH VEGAN
 
-
-# On tsbf by students:
-commSt <- table(tsbf$etage, tsbf$ordre)
-x11()
-rarecurve(commSt, step=1)
-
 # ON GSMF TAXA
 
 # need to make a count of taxa per sample order and transect id for community matrix --------------
+
+# rarecurve TSBF finlande
+
+commTSBfin <- table(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa)
+x11()
+par(mfrow=c(1,4))
+rarecurve(commTSBfin, ylim=c(1,10))
+
+# SOILFARI
+
 collector1 <- subset(soil, soil$observer=="Collector1")
 commucoll1 <- table(collector1$transect_id, collector1$taxa)
-x11()
-par(mfrow=c(1,3))
+
 rarecurve(commucoll1, step=1, 
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector1 - Cropfields", ylim=c(1,10))
 
