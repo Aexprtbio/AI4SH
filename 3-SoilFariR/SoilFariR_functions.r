@@ -167,10 +167,10 @@ milieu <- function(dataset) {
 	dataset <- dataset %>%
 		mutate(
 			vegetation = case_when(
-				grepl("Ro", transect_id, ignore.case=TRUE) ~ 'Forest',
-				grepl("forest", description, ignore.case=TRUE) ~ 'Forest',
-				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ 'Crop',
-				grepl("meadow", transect_id, ignore.case=TRUE) ~ 'Grassland'),
+				grepl("Ro", transect_id, ignore.case=TRUE) ~ 'forest',
+				grepl("forest", description, ignore.case=TRUE) ~ 'forest',
+				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ 'crop',
+				grepl("meadow", transect_id, ignore.case=TRUE) ~ 'grassland'),
 				NA_character_
 				
 			)

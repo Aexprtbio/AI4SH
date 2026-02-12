@@ -96,7 +96,7 @@ def getobs_bytax(progress_signal, taxon_id, per_page=200, country=None, region=N
         all_observations = all_observations[all_observations['region'].isin(region)]
 
         #final recomposition of the dataframe before returning results
-    #all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
+    all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
     return all_observations
 
 
@@ -133,6 +133,7 @@ def getobs_us(user_id, per_page=200):
 
     # Convertir les observations en DataFrame
     observations_df = pd.DataFrame(all_observations)
+    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
     return observations_df
 
 
@@ -170,7 +171,7 @@ def getobs_proj(project_id, per_page=200):
 
     # Convertir les observations en DataFrame
     observations_df = pd.DataFrame(all_observations)
-    #observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
+    observations_df["latitude", "longitude"]=observations_df["location"].str.split(",", expand=True)
 
     return observations_df
 
