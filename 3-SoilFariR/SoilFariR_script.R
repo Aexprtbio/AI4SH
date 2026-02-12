@@ -40,12 +40,30 @@ summary(tsbf_fin)
 summary(soil)
 
 soil <- gettaxa(soil)
-
+soil <- milieu(soil)
+#soil$location<-as.character(soil$location)
 #soil %>%
-#  separate
+#  separate(soil, location,
+#    sep=",", into=c("latitude", "longitude"))
 
 tsbf_rou$vegetation="forest"
 
+# TEMPORARY CONCATENATION OF DFS
+
+temprou <- data.frame(tsbf_rou$groupe_tp, tsbf_rou$gsmf_taxa, tsbf_rou$vegetation, tsbf_rou$etudiant)
+tempfin <- data.frame(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa, tsbf_fin$vegetation, tsbf_fin$observer)
+tempsaf <- data.frame(soil$transect_id, soil$taxa, soil$vegetation, soil$observer)
+
+temprou$method <- "TSBF"
+tempfin$method <- "TSBF"
+tempsaf$method <- "SAFARI"
+
+
+colnames(temprou)<-c("ID", "taxa", "vegetation", "observer", "method")
+colnames(tempfin)<-c("ID", "taxa", "vegetation", "observer","method")
+colnames(tempsaf)<-c("ID", "taxa", "vegetation", "observer","method")
+
+df_soil <- rbind(tempfin, temprou, tempsaf)
 
 
 ################################################################################
@@ -72,9 +90,9 @@ theme_minimal()
 
 # Morphological diversity in Safari GLOBAL
 x11()
-ps <- ggplot(soil, aes(y=taxa, fill=taxa))
+ps <- ggplot(df_soil, aes(y=taxa, fill=taxa))
 ps + geom_bar(stat="count")+
-coord_polar("y", start=0)+
+facet_wrap(~vegetation)+
 theme_minimal()
 
 
@@ -111,8 +129,10 @@ soil <- soil %>%
 ###################################################################################################
 ###################################################################################################
 # RARE CURVE WITH VEGAN
-
 # ON GSMF TAXA
+
+commtt <- table(df_soil$vegetation, df_soil$taxa)
+plotobs <- rarecurve(commtt)
 
 # need to make a count of taxa per sample order and transect id for community matrix --------------
 
@@ -146,11 +166,18 @@ rarecurve(commucoll3, step=1,
 commu <- table(soil$vegetation, soil$taxa)
 rarecurve(commu, step=1)
 
+
+
+
+
 # need to make a count of taxa per transect id for community matrix --------------
 
 soil$taxa <- as.factor(soil$taxa)
 soil$transect_id <- as.factor(soil$transect_id)
 soil$observer <- as.factor(soil$observer)
+
+
+
 
 # community matrix per observer --------------------------------------------------
 
