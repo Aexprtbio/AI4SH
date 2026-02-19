@@ -14,6 +14,7 @@ library(hms)
 library(lubridate)
 library(tidyr)
 library(vegan)
+library(wesanderson)
 
 #  work on ACP now : LIBS -----------------------------------------------------------
 library(FactoMineR)
@@ -33,6 +34,7 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
 tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
+safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
 soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
 
 summary(tsbf_rou)
@@ -41,6 +43,11 @@ summary(soil)
 
 soil <- gettaxa(soil)
 soil <- milieu(soil)
+soil <- gemethod(soil) 
+
+soil <- subset(soil, is.na(soil$transect_id)==FALSE)
+soil <- subset(soil, is.na(soil$taxa)==FALSE)
+
 #soil$location<-as.character(soil$location)
 #soil %>%
 #  separate(soil, location,
@@ -101,8 +108,15 @@ theme_minimal()
 
 #soil <- subset(soil, soil$taxa != ('d_acari'))
 #soil <- subset(soil, soil$taxa != ('d_collembola'))
-soil <- subset(soil, is.na(soil$transect_id)==FALSE)
-soil <- subset(soil, is.na(soil$taxa)==FALSE)
+
+
+
+#diversity seenn with different methods
+div <- ggplot(df_soil, aes(x=method, y=taxa, fill=taxa))
+div + geom_col()+
+  scale_fill_viridis_d()+
+  facet_wrap(~vegetation)+
+  theme(axis.text.y=element_blank())
 
 
 ##################################################################################
@@ -134,6 +148,8 @@ soil <- soil %>%
 commtt <- table(df_soil$vegetation, df_soil$taxa)
 plotobs <- rarecurve(commtt)
 
+
+#
 # need to make a count of taxa per sample order and transect id for community matrix --------------
 
 # rarecurve TSBF finlande

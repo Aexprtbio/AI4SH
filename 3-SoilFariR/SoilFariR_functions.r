@@ -22,35 +22,18 @@ getuser <- function(dataset) {
 
 
 
+#function for inaturalist to find which method was used:
 
-# we need to separate by days of prospect == Obsolete
+getmethod <- function(dataset) {
+	dataset <- dataset %>%
+    mutate(
+      saf_method = case_when(
+        grepl("-SW|Sit", description, ignore.case = TRUE) ~ "Sit-Wait",
+        grepl("-R|Rand|rand", description, ignore.case = TRUE) ~ "Random",
+        grepl("-T", description, ignore.case=TRUE) ~ "Transect"
+        )
+      )
 
-
-getday <- function(dataset){
-
-soil$day = ""
-
-	for (i in 1:length(soil$observed_on_string)) {
-	  if (grepl("2023-04-17", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day1"
-	  } else if (grepl("2023-04-18", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day2"
-	  } else if (grepl("2023-04-20", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day3"
-	  } else if (grepl("2023-04-30", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "out"
-	  } else if (grepl("2025-05-14", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day4"
-	  } else if (grepl("2025-05-16", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day5"
-	  } else if (grepl("2025-05-17", soil$observed_on_string[i], ignore.case = TRUE)) {
-	    soil$day[i] <- "day6"
-	  } else {
-	  	soil$day[i] <- "out"
-	  }
-	}
-
-soil <- subset(soil, soil$day != "out")
 
 }
 
@@ -82,9 +65,11 @@ gettaxa <- function(dataset){
 				grepl("47208", ident_taxon_ids, ignore.case=TRUE) ~ 'coleoptera',
 				grepl("49470", ident_taxon_ids, ignore.case=TRUE) ~ 'collembola',
 				grepl("1269340", ident_taxon_ids, ignore.case=TRUE) ~ 'ants',
+				grepl("47157", ident_taxon_ids, ignore.case=TRUE) ~ 'lepidoptera',
 				grepl("61267", ident_taxon_ids, ignore.case=TRUE) ~ 'heteroptera',
 				grepl("47735", ident_taxon_ids, ignore.case=TRUE) ~ 'diplopoda',
 				grepl("49556", ident_taxon_ids, ignore.case=TRUE) ~ 'chilopoda',
+				grepl("84638", ident_taxon_ids, ignore.case=TRUE) ~ 'symphyla',
 				grepl("62164", ident_taxon_ids, ignore.case=TRUE) ~ 'trichoptera',
 				grepl("47114", ident_taxon_ids, ignore.case=TRUE) ~ 'gastropoda',
 				grepl("47651", ident_taxon_ids, ignore.case=TRUE) ~ 'orthoptera',

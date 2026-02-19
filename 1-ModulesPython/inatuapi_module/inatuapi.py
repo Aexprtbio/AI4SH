@@ -32,72 +32,53 @@ def check_internet(url="http://www.google.com"):
 
 ##############################
 # Lets get obs by taxon_id
-
-def getobs_bytax(progress_signal, taxon_id, per_page=200, country=None, region=None):
-    base_url=f'https://api.inaturalist.org/v1/observations?taxon_id={taxon_id}'
+def getobs_bytax(taxon_id, per_page=200):
+    base_url = f'https://api.inaturalist.org/v1/observations?taxon_id={taxon_id}'
     params = {
         'per_page': per_page,
         'page': 1,
-        'taxon_id' : taxon_id,
+        'taxon_id': taxon_id,
         'order': 'asc'
     }
 
-    all_observations = []
+    all_observations = []  # Liste pour stocker les résultats bruts (dictionnaires)
     session = requests.Session()
-    retries = Retry(total=5, backoff_factor=1,
-        status_forcelist=[502, 503, 504, 522, 524, 408])
+    retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504, 522, 524, 408])
     adapter = HTTPAdapter(max_retries=retries)
     session.mount('https://', adapter)
 
-    while True:
-        response = requests.get(base_url, params=params)
+    # Récupération du nombre total de pages
+    response = session.get(base_url, params=params)
+    data = response.json()
+
+    if 'total_results' in data:
+        total = data['total_results']
+        n_page = int(total / per_page) + (total % per_page > 0)
+    else:
+        n_page = 1
+
+    # Téléchargement des données page par page
+    for page in trange(1, n_page + 1, desc="Downloading"):
+        params['page'] = page
+        response = session.get(base_url, params=params)
         data = response.json()
+        if 'results' not in data:
+            print("Erreur dans la réponse API :", data)
+            break
+
+        # Ajouter les résultats (dictionnaires) à la liste
+        all_observations.extend(data['results'])  # ✅ Correct : data['results'] est une liste de dictionnaires
+        time.sleep(1)
+
+    # Conversion en DataFrame UNE SEULE FOIS à la fin
+    if all_observations:
+        df = pd.DataFrame(all_observations)
+        # Extraction de la latitude et longitude
         
-
-
-        if 'total_results' in data:
-            total=data['total_results']
-            n_page=int(total/per_page) + (total%per_page>0)
-        else:
-            n_page=1
-
-        #progression bar
-        for page in trange(1,n_page+1, desc="Downloading"):
-            params['page']=page
-            response = requests.get(base_url, params=params)
-            data = response.json()
-            progress_signal.emit(page, n_page)
-
-            # Vérification présence de la clé 'results'
-            if 'results' not in data:
-                print("Erreur dans la réponse API :", data)
-                break
-            # Ajouter les observations à la liste
-            all_observations.extend(pd.DataFrame(data['results']))
-
-            time.sleep(1)
-        
-        if len(data['results']) < per_page:
-            break    
-
-
-    if country is not None:
-        if isinstance(country, str):
-            country=[country]
-
-        all_observations['country']=all_observations[['place_guess']].apply(lambda x: x.split(',')[-1].strip())
-        all_observations = all_observations[all_observations['country'].isin(country)]
-
-        
-    if region is not None:
-        if isinstance(region, str):
-            region=[region]
-        all_observations['region']=all_observations[['place_guess']].apply(lambda x: x.split(',')[-2].strip())
-        all_observations = all_observations[all_observations['region'].isin(region)]
-
-        #final recomposition of the dataframe before returning results
-    all_observations[["latitude", "longitude"]]=all_observations["location"].str.split(",", expand=True)
-    return all_observations
+        df[["latitude", "longitude"]] = df["location"].str.split(",", expand=True)
+        return df
+    else:
+        return pd.DataFrame()  # Retourne un DataFrame vide si aucune observation
 
 
 print('\n -------------------------------')
