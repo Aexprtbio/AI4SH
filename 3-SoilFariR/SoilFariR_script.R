@@ -34,17 +34,26 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
 tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
-safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
-soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
+safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')  # observations des étudiant.es
+soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';') # mine
 
 summary(tsbf_rou)
 summary(tsbf_fin)
 summary(soil)
+summary(safa_esol)
 
+#####################################################################################
+#####################################################################################
+# processing safa_esol to make it corresponds w soil --------------------------------
+safa_esol <- gettaxa(safa_esol)
+safa_esol <- milieu(safa_esol)
+safa_esol$vegetation="forest"
+safa_esol <- getmethod(safa_esol) 
+
+#processing soil df to be sure
 soil <- gettaxa(soil)
 soil <- milieu(soil)
-soil <- gemethod(soil) 
-
+soil <- getmethod(soil) 
 soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
@@ -55,32 +64,29 @@ soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
 tsbf_rou$vegetation="forest"
 
-# TEMPORARY CONCATENATION OF DFS
+# TEMPORARY CONCATENATION OF DFS ------------------------------------------------------
 
 temprou <- data.frame(tsbf_rou$groupe_tp, tsbf_rou$gsmf_taxa, tsbf_rou$vegetation, tsbf_rou$etudiant)
 tempfin <- data.frame(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa, tsbf_fin$vegetation, tsbf_fin$observer)
 tempsaf <- data.frame(soil$transect_id, soil$taxa, soil$vegetation, soil$observer)
+tempesol <- data.frame(safa_esol$transect_id, safa_esol$taxa, safa_esol$vegetation, safa_esol$observer)
 
 temprou$method <- "TSBF"
 tempfin$method <- "TSBF"
 tempsaf$method <- "SAFARI"
-
+tempesol$method <- "SAFARI"
 
 colnames(temprou)<-c("ID", "taxa", "vegetation", "observer", "method")
 colnames(tempfin)<-c("ID", "taxa", "vegetation", "observer","method")
 colnames(tempsaf)<-c("ID", "taxa", "vegetation", "observer","method")
+colnames(tempesol)<-c("ID", "taxa", "vegetation", "observer","method")
 
-df_soil <- rbind(tempfin, temprou, tempsaf)
+df_soil <- rbind(tempfin, temprou, tempsaf, tempesol)
 
 
 ################################################################################
+################################################################################
 # try plots ----------------------------------------------------------------------
-boxplot(soil$time~soil$month) ## cool
-# let's now process the number of individuals on time by user.
-
-boxplot(soil$time~soil$observer)
-
-
 # Morphological diversity in TSBF Rouen
 p <- ggplot(tsbf_rou, aes(y=gsmf_taxa, fill=gsmf_taxa))
 p + geom_bar(stat="count")+
@@ -103,6 +109,13 @@ facet_wrap(~vegetation)+
 theme_minimal()
 
 
+#diversity seenn with different methods
+div <- ggplot(df_soil, aes(x=vegetation, y=taxa, fill=taxa))
+div + geom_col()+
+  scale_fill_viridis_d()+
+  facet_wrap(~method)+
+  theme(axis.text.y=element_blank())
+
 
 # and remove outliers / non-macrofauna ------------------------------------------
 
@@ -110,13 +123,6 @@ theme_minimal()
 #soil <- subset(soil, soil$taxa != ('d_collembola'))
 
 
-
-#diversity seenn with different methods
-div <- ggplot(df_soil, aes(x=method, y=taxa, fill=taxa))
-div + geom_col()+
-  scale_fill_viridis_d()+
-  facet_wrap(~vegetation)+
-  theme(axis.text.y=element_blank())
 
 
 ##################################################################################
@@ -143,7 +149,8 @@ soil <- soil %>%
 ###################################################################################################
 ###################################################################################################
 # RARE CURVE WITH VEGAN
-# ON GSMF TAXA
+
+# ON GSMF TAXA -----------------------------------------------------------------------------------
 
 commtt <- table(df_soil$vegetation, df_soil$taxa)
 plotobs <- rarecurve(commtt)
@@ -178,12 +185,9 @@ rarecurve(commucoll3, step=1,
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector3 - Cropfields", ylim=c(1,10))
 
 
-# Whole dataset - vegetation x taxa
-commu <- table(soil$vegetation, soil$taxa)
+# Whole dataset - method x taxa -----------------------------------------------------------------
+commu <- table(soil$saf_method, soil$taxa)
 rarecurve(commu, step=1)
-
-
-
 
 
 # need to make a count of taxa per transect id for community matrix --------------
@@ -191,8 +195,6 @@ rarecurve(commu, step=1)
 soil$taxa <- as.factor(soil$taxa)
 soil$transect_id <- as.factor(soil$transect_id)
 soil$observer <- as.factor(soil$observer)
-
-
 
 
 # community matrix per observer --------------------------------------------------
@@ -232,9 +234,6 @@ ggplot(plotobs) +
     subtitle = "1 plot per observer",
     x = "Number of invertebrates sampled",
     y = "Species Richness")
-
-
-
 
 
 

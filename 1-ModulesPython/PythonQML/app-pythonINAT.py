@@ -73,20 +73,17 @@ class InatUAPI(QtWidgets.QWidget):
         self.taxon_id = QtWidgets.QLineEdit("Enter taxon identifier")
         self.project_id = QtWidgets.QLineEdit("Enter project identifier")
         self.user_id = QtWidgets.QLineEdit("Enter user identifier")
-        self.country = QtWidgets.QLineEdit("Enter country code (optional)")
 
         # Cache les champs par défaut
         self.taxon_id.hide()
         self.project_id.hide()
         self.user_id.hide()
-        self.country.hide()
 
         # Layout
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.text)
         self.layout.addWidget(self.button1)
         self.layout.addWidget(self.taxon_id)
-        self.layout.addWidget(self.country)  # Optionnel pour taxon
         self.layout.addWidget(self.button2)
         self.layout.addWidget(self.project_id)
         self.layout.addWidget(self.button3)
@@ -122,7 +119,6 @@ class InatUAPI(QtWidgets.QWidget):
     def show_taxon_id(self):
         self.taxon_id.show()
         self.taxon_id.setFocus()
-        self.country.show()  # Affiche le champ country pour les recherches par taxon
         self.project_id.hide()
         self.user_id.hide()
         self.current_input = self.taxon_id
@@ -134,7 +130,6 @@ class InatUAPI(QtWidgets.QWidget):
         self.project_id.setFocus()
         self.taxon_id.hide()
         self.user_id.hide()
-        self.country.hide()
         self.current_input = self.project_id
         self.current_input_id = 2
 
@@ -144,7 +139,6 @@ class InatUAPI(QtWidgets.QWidget):
         self.user_id.setFocus()
         self.taxon_id.hide()
         self.project_id.hide()
-        self.country.hide()
         self.current_input = self.user_id
         self.current_input_id = 3
 

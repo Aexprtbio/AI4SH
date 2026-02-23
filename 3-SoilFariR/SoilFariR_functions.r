@@ -28,7 +28,7 @@ getmethod <- function(dataset) {
 	dataset <- dataset %>%
     mutate(
       saf_method = case_when(
-        grepl("-SW|Sit", description, ignore.case = TRUE) ~ "Sit-Wait",
+        grepl("-SW|Sit|wait", description, ignore.case = TRUE) ~ "Sit-Wait",
         grepl("-R|Rand|rand", description, ignore.case = TRUE) ~ "Random",
         grepl("-T", description, ignore.case=TRUE) ~ "Transect"
         )
@@ -53,7 +53,7 @@ getmethod <- function(dataset) {
 # 62164 = Trichoptera
 # 47114 = Gastropoda
 # 47651 = Orthoptera
-# 1418362 = Lumbricina
+# 1418362|69758|333586 = Lumbricina
 # 81769 = Blattodea
 
 gettaxa <- function(dataset){
@@ -73,7 +73,7 @@ gettaxa <- function(dataset){
 				grepl("62164", ident_taxon_ids, ignore.case=TRUE) ~ 'trichoptera',
 				grepl("47114", ident_taxon_ids, ignore.case=TRUE) ~ 'gastropoda',
 				grepl("47651", ident_taxon_ids, ignore.case=TRUE) ~ 'orthoptera',
-				grepl("1418362", ident_taxon_ids, ignore.case=TRUE) ~ 'earthworm',
+				grepl("1418362|69758|333586", ident_taxon_ids, ignore.case=TRUE) ~ 'earthworm',
 				grepl("81769", ident_taxon_ids, ignore.case=TRUE) ~ 'blattodea',
 				grepl("52788", ident_taxon_ids, ignore.case=TRUE) ~ 'acari',
 

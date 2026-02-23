@@ -38,7 +38,6 @@ def getobs_bytax(taxon_id, per_page=200):
         'per_page': per_page,
         'page': 1,
         'taxon_id': taxon_id,
-        'order': 'asc'
     }
 
     all_observations = []  # Liste pour stocker les résultats bruts (dictionnaires)
@@ -47,39 +46,27 @@ def getobs_bytax(taxon_id, per_page=200):
     adapter = HTTPAdapter(max_retries=retries)
     session.mount('https://', adapter)
 
-    # Récupération du nombre total de pages
-    response = session.get(base_url, params=params)
-    data = response.json()
-
-    if 'total_results' in data:
-        total = data['total_results']
-        n_page = int(total / per_page) + (total % per_page > 0)
-    else:
-        n_page = 1
-
-    # Téléchargement des données page par page
-    for page in trange(1, n_page + 1, desc="Downloading"):
-        params['page'] = page
-        response = session.get(base_url, params=params)
+    while True:
+        # Récupération du nombre total de pages
+        response = requests.get(base_url, params=params)
         data = response.json()
-        if 'results' not in data:
-            print("Erreur dans la réponse API :", data)
-            break
 
         # Ajouter les résultats (dictionnaires) à la liste
         all_observations.extend(data['results'])  # ✅ Correct : data['results'] est une liste de dictionnaires
         time.sleep(1)
+                # Vérifier s'il y a plus de pages
+        if len(data['results']) < per_page:
+            break
+
+        # Passer à la page suivante
+        params['page'] += 1
 
     # Conversion en DataFrame UNE SEULE FOIS à la fin
-    if all_observations:
-        df = pd.DataFrame(all_observations)
+    df = pd.DataFrame(all_observations)
         # Extraction de la latitude et longitude
-        
-        df[["latitude", "longitude"]] = df["location"].str.split(",", expand=True)
-        return df
-    else:
-        return pd.DataFrame()  # Retourne un DataFrame vide si aucune observation
 
+    df[["latitude", "longitude"]] = df["location"].str.split(",", expand=True)
+    return df
 
 print('\n -------------------------------')
 print('Function getobs_bytax loaded')
