@@ -1,7 +1,7 @@
 # CREATED ON 09 MAY 2025
 # PRÉTAT
 
-# Last update : 11/02/2026
+# Last update : 24/02/2026
 
 rm(list=ls())
 
@@ -35,15 +35,17 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
-tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE)
-safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE)  # observations des étudiant.es
-soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE) # mine
+tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
+
+safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))  # observations des étudiant.es
+safa_fin <-read.csv2('finland_2025_safari.csv', h=TRUE, stringsAsFactor=, na.strings=c('', 'na'))  # observations de Finlande
+soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na')) # mine
 
 summary(tsbf_rou)
 summary(tsbf_fin)
 summary(soil)
 summary(safa_esol)
-
+summary(safa_fin)
 
 
 #####################################################################################
@@ -61,13 +63,26 @@ latlong <- location %>%
 safa_esol$latitude <- latlong$latitude
 safa_esol$longitude <- latlong$longitude
 
+safa_esol <- subset(safa_esol, is.na(safa_esol$place_ids)!=TRUE)
+
+# processing safa_fin to make it corresponds w soil --------------------------------
+safa_fin <- gettaxa(safa_fin)
+safa_fin <- milieu(safa_fin)
+safa_fin <- getmethod(safa_fin) 
+
+location<-data.frame(safa_fin$location)
+latlong <- location %>%
+  separate(safa_fin.location,
+    sep=",", into=c("latitude", "longitude"), remove=TRUE)
+safa_fin$latitude <- latlong$latitude
+safa_fin$longitude <- latlong$longitude
 
 
-#processing soil df to be sure
+# processing soil df to be sure -----------------------------------------------------
 soil <- gettaxa(soil)
 soil <- milieu(soil)
 soil <- getmethod(soil) 
-soil <- subset(soil, is.na(soil$transect_id)==FALSE)
+#soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
 location<-data.frame(soil$location)
@@ -80,9 +95,37 @@ soil$longitude <- latlong$longitude
 
 a <- names(soil)
 b <- names(safa_esol)
+c <- names(safa_fin)
 setdiff(b, a)
+setdiff(b, c)
 
-safari <- rbind(soil, safa_esol)
+safari <- rbind(soil, safa_fin)
+
+safari$time_observed_at <- as.character(safari$time_observed_at)
+safari$observed_on_lub <- dmy(safari$observed_on)
+safari$day <- day(safari$observed_on_lub)
+safari$month <- month(safari$observed_on_lub)
+safari$year <- year(safari$observed_on_lub)
+
+safari <- getuser(safari)
+safari <- gettransect(safari)
+
+safari$month <- as.factor(safari$month)
+safari$year <- as.factor(safari$year)
+safari$transect_id <- as.factor(safari$transect_id)
+safari$taxa <- as.factor(safari$taxa)
+safari$observer <- as.factor(safari$observer)
+safari$saf_method <- as.factor(safari$saf_method)
+
+
+safari <- subset(safari, is.na(safari$transect_id)!=TRUE)
+safari <- subset(safari, is.na(safari$taxa)!=TRUE)
+safari <- subset(safari, is.na(safari$observer)!=TRUE)
+safari$latitude <- as.numeric(safari$latitude)
+safari$longitude <- as.numeric(safari$longitude)
+summary(safari)
+
+
 write.csv(safari, 'safari_all_projects_dataframe.csv')
 
 
@@ -92,7 +135,7 @@ tsbf_rou$vegetation="forest"
 
 temprou <- data.frame(tsbf_rou$groupe_tp, tsbf_rou$gsmf_taxa, tsbf_rou$vegetation, tsbf_rou$etudiant)
 tempfin <- data.frame(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa, tsbf_fin$vegetation, tsbf_fin$observer)
-tempsaf <- data.frame(soil$transect_id, soil$taxa, soil$vegetation, soil$observer)
+tempsaf <- data.frame(safari$transect_id, safari$taxa, safari$vegetation, safari$observer)
 tempesol <- data.frame(safa_esol$transect_id, safa_esol$taxa, safa_esol$vegetation, safa_esol$observer)
 
 temprou$method <- "TSBF"
@@ -372,16 +415,15 @@ MVA.plot(ACM, byfac=TRUE, fac=df_soil$vegetation) # graphs
 
 
 
+
+
+
+
 # Mixed Analysis with SAFARI sampling and quantitative data -----------------------
 
+safari <- droplevels(safari)
 
-
-
-
-
-
-
-
+Amix <- dudi.mix(safari, scannf=FALSE, nf=10)
 
 
 

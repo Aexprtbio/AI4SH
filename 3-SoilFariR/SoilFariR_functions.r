@@ -8,11 +8,11 @@ getuser <- function(dataset) {
     mutate(
       observer = case_when(
         grepl("angemouth", user, ignore.case = TRUE) ~ "Angelique",
-        grepl("erick", user, ignore.case = TRUE) ~ "Eric",
+        grepl("eric", user, ignore.case = TRUE) ~ "Eric",
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
-        grepl("dacar", user, ignore.case = TRUE) ~ "Dacar",
         grepl("alex", user, ignore.case = TRUE) ~ "Alex",
         grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
+        grepl("laurence", description, ignore.case = TRUE) ~ "Dacar",
         grepl("collector1", user, ignore.case = TRUE) ~ "Pierre",
         grepl("collector2", user, ignore.case = TRUE) ~ "Paul",
         grepl("collector3", user, ignore.case = TRUE) ~ "Jacques"      )
@@ -30,7 +30,7 @@ getmethod <- function(dataset) {
       saf_method = case_when(
         grepl("-SW|Sit|wait", description, ignore.case = TRUE) ~ "Sit-Wait",
         grepl("-R|Rand|rand", description, ignore.case = TRUE) ~ "Random",
-        grepl("-T", description, ignore.case=TRUE) ~ "Transect"
+        grepl("-T|transect", description, ignore.case=TRUE) ~ "Transect"
         )
       )
 
