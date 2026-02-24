@@ -1,4 +1,4 @@
-Field_ID;observer;Sample_ID;Specimen;horizon;identification;gsmf_taxa;moisture;latitude;longitude;date;vegetation;comment
+﻿Field_ID;observer;Sample_ID;Specimen;horizon;identification;gsmf_taxa;moisture;latitude;longitude;date;vegetation;comment
 B5;Liisa;C;1;surface;True bug;hemiptera;27,1;60.820352;23.493931;03/06/2025;crop;
 B5;Liisa;C;2;monolith;Earthworm;earthworm;27,1;60.820352;23.493931;03/06/2025;crop;
 B5;Liisa;C;3;monolith;Beetle/Carabidae;coleoptera;27,1;60.820352;23.493931;03/06/2025;crop;

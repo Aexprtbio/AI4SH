@@ -1,4 +1,4 @@
-                                     ;groupe_tp;etage;horizon;etudiant;classe;ordre;morphosp;nombre;categorie_eco;stade;ind_m2;groupe_trophique;gsmf_taxa;commentaire
+ï»¿                                     ;groupe_tp;etage;horizon;etudiant;classe;ordre;morphosp;nombre;categorie_eco;stade;ind_m2;groupe_trophique;gsmf_taxa;commentaire
 TP1A_8_O;TP1A;8;O;Margaux;Vide;Vide;Vide;0;;;0;;na;
 TP1B_4_O;TP1B;4;O;Malo;Collembola;Collembola;Vide;0;;;0;;collembola;
 TP1B_5_A;TP1B;5;A;Tanguy;Vide;Vide;Vide;0;;;0;;na;
@@ -12,28 +12,28 @@ TP1A_3_O;TP1A;3;O;Matthis;Coleoptera;Elateridae;Elateridae;1;;adulte;16;;coleopt
 TP1B_2_O;TP1B;2;O;Romane;Coleoptera;Tenebrionidae;Tenebrionidae;1;;adulte;16;;coleoptera;
 TP1A_6_O;TP1A;6;O;Kateryna;Coleoptera;Carabidae;Bembidion sp;1;;adulte;16;;coleoptera;
 TP1A_6_O;TP1A;6;O;Paul;Hymenoptera;Formicidae;Formicidae;1;;adulte;16;;hymenoptera;Pigmente
-TP1A_6_O;TP1A;6;O;Kateryna;Coleoptera;Staphylinidae;Staphylinidae sp3;1;;adulte;16;;coleoptera;très petit, ovale, sans soie
+TP1A_6_O;TP1A;6;O;Kateryna;Coleoptera;Staphylinidae;Staphylinidae sp3;1;;adulte;16;;coleoptera;trÃ¨s petit, ovale, sans soie
 TP1A_7_A;TP1A;7;A;Matthis;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;adulte;16;;earthworm;
 TP1B_4_O;TP1B;4;O;Malo;Coleoptera;Coleoptera;Coleoptera;1;;adulte;16;;coleoptera;
 TP1B_4_O;TP1B;4;O;Malo;Psocoptera;Psocoptera;Psocoptera;1;;adulte;16;;psocoptera;abdomen endommage
 TP1B_7_A;TP1B;7;A;Zora;Diplopoda;Julidae;Julidae;1;;adulte;16;;diplopoda;
 TP1B_7_A;TP1B;7;A;Zora;Lumbricidae;Lumbricidae;Lumbricidae;1;epige;adulte;16;;earthworm;
 TP1B_8_O;TP1B;8;O;Ewan;Coleoptera;Carabidae;Carabidae sp;1;;adulte;16;;coleoptera;
-TP2A_1_O;TP2A;1;O;Eléa;Coleoptera;Chrysomeloidea;Chrysomeloidea;1;;adulte;16;;coleoptera;
-TP2A_1_O;TP2A;1;O;Maïline;Coleoptera;Coleoptera;Coleoptera;1;;adulte;16;;coleoptera;
-TP2A_1_O;TP2A;1;O;Eléa;Hemiptera;Hemiptera;Hemiptera;1;;adulte;16;;hemiptera;
-TP2A_3_A;TP2A;3;A;Chloé D;Coleoptera;Elateridae;Athous haemorrhoidalis;1;;adulte;16;;coleoptera;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Coleoptera;Chrysomeloidea;Chrysomeloidea;1;;adulte;16;;coleoptera;
+TP2A_1_O;TP2A;1;O;MaÃ¯line;Coleoptera;Coleoptera;Coleoptera;1;;adulte;16;;coleoptera;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Hemiptera;Hemiptera;Hemiptera;1;;adulte;16;;hemiptera;
+TP2A_3_A;TP2A;3;A;ChloÃ© D;Coleoptera;Elateridae;Athous haemorrhoidalis;1;;adulte;16;;coleoptera;
 TP2A_6_A;TP2A;6;A;Lou.L;Coleoptera;Elateridae;Athous haemorrhoidalis;1;;adulte;16;;coleoptera;
 TP1A_3_O;TP1A;3;O;Matthis;Diplopoda;Diplopoda;Diplopoda;1;;juvenile;16;;diplopoda;ocelles presentes
 TP1A_7_A;TP1A;7;A;Matthis;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
-TP1B_3_O;TP1B;3;O;Jérémy;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
+TP1B_3_O;TP1B;3;O;JÃ©rÃ©my;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
 TP1B_4_O;TP1B;4;O;Malo;Lumbricidae;Lumbricidae;Lumbricidae;1;anecique;juvenile;16;;earthworm;
 TP1B_7_A;TP1B;7;A;Zora;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
 TP1B_7_A;TP1B;7;A;Zora;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
 TP1B_7_O;TP1B;7;O;Zora;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile;16;;earthworm;
 TP1A_8_A;TP1A;8;A;Margaux;Arachnida;Araneae;Araneae;1;;juvenile ;16;;arachnida;
 TP1A_8_A;TP1A;8;A;Margaux;Lumbricidae;Lumbricidae;Lumbricidae;1;endoge;juvenile ;16;;earthworm;
-TP1A_1_A;TP1A;1;A;Nolan;Diptera;Diptera;Diptera sp3;1;;larve;16;;diptera;pièces buccales sclerifiees, longues soies terminales et bourgeon de patte
+TP1A_1_A;TP1A;1;A;Nolan;Diptera;Diptera;Diptera sp3;1;;larve;16;;diptera;piÃ¨ces buccales sclerifiees, longues soies terminales et bourgeon de patte
 TP1A_2_O;TP1A;2;O;Celia;Coleoptera;Elateridae;Denticollis;1;;larve;16;;coleoptera;non pigmente
 TP1A_2_A;TP1A;2;A;Paul;Coleoptera;Tenebrionidae;Tenebrionidae;1;;larve;16;;coleoptera;
 TP1A_4_A;TP1A;4;A;Louis ;Coleoptera;Elateridae;Agriotes ;1;;larve;16;;coleoptera;Elateridae
@@ -43,19 +43,19 @@ TP1A_6_A;TP1A;6;A;Alexandre;Diptera;Diptera;Diptera sp1;1;;larve;16;;diptera;lon
 TP1A_6_O;TP1A;6;O;Kateryna;Diptera;Diptera;Diptera;1;;larve;16;;diptera;
 TP1A_7_A;TP1A;7;A;Matthis;Coleoptera;Elateridae;Denticollis;1;;larve;16;;coleoptera;
 TP1A_7_O;TP1A;7;O;Matthis;Diptera;Diptera;Diptera sp2;1;;larve;16;;diptera;
-TP1A_7_O;TP1A;7;O;Matthis;Diptera;Diptera;Diptera sp4;1;;larve;16;;diptera;trapu,jaune-vert,petites pièces buccales
-TP2A_1_O;TP2A;1;O;Maïline;Coleoptera;Tenebrionidae;Tenebrionidae;1;;larve;16;;coleoptera;
+TP1A_7_O;TP1A;7;O;Matthis;Diptera;Diptera;Diptera sp4;1;;larve;16;;diptera;trapu,jaune-vert,petites piÃ¨ces buccales
+TP2A_1_O;TP2A;1;O;MaÃ¯line;Coleoptera;Tenebrionidae;Tenebrionidae;1;;larve;16;;coleoptera;
 TP1B_1_O;TP1B;1;O;Jade;Coleoptera;Curculionidae;Curculionidae;1;;larve;16;;coleoptera;
-TP1B_2_A;TP1B;2;A;Angéla;Diptera;Diptera;Diptera;1;;larve;16;;diptera;Très blanc laiteux
-TP1B_2_A;TP1B;2;A;Angéla;Coleoptera;Coleoptera;Heterogastra agrilinae;1;;larve;16;;coleoptera;
+TP1B_2_A;TP1B;2;A;AngÃ©la;Diptera;Diptera;Diptera;1;;larve;16;;diptera;TrÃ¨s blanc laiteux
+TP1B_2_A;TP1B;2;A;AngÃ©la;Coleoptera;Coleoptera;Heterogastra agrilinae;1;;larve;16;;coleoptera;
 TP1B_3_A;TP1B;3;A;Repel;Diptera;Diptera;Nematocera;1;;larve;16;;diptera;
-TP1B_3_O;TP1B;3;O;Jérémy;Diptera;Diptera;Diptera;1;;larve;16;;diptera;
+TP1B_3_O;TP1B;3;O;JÃ©rÃ©my;Diptera;Diptera;Diptera;1;;larve;16;;diptera;
 TP1B_6_O;TP1B;6;O;Louise;Coleoptera;Coleoptera;Coleoptera;1;;larve;16;;coleoptera;Ecrase 
 TP1B_6_O;TP1B;6;O;Louise;Coleoptera;Coleoptera;Heterogastra agrilinae;1;;larve;16;;coleoptera;
 TP1B_6_O;TP1B;6;O;Louise;Orthoptera;Orthoptera;Orthoptera;1;;larve;16;;orthoptera;
-TP2A_3_A;TP2A;3;A;Chloé D;Coleoptera;Elateridae;Denticollis;1;;larve;16;;coleoptera;
+TP2A_3_A;TP2A;3;A;ChloÃ© D;Coleoptera;Elateridae;Denticollis;1;;larve;16;;coleoptera;
 TP2A_8_A;TP2A;8;A;Samba;Coleoptera;Elateridae;Elateridae;1;;larve;16;;coleoptera;
-TP2A_8_O;TP2A;8;O;Cécile;Coleoptera;Coleoptera;Coleoptera;1;;larve;16;;coleoptera;
+TP2A_8_O;TP2A;8;O;CÃ©cile;Coleoptera;Coleoptera;Coleoptera;1;;larve;16;;coleoptera;
 TP1A_1_A;TP1A;1;A;Nathan;Coleoptera;Curculionidae;Curculionidae;1;;larve ;16;;coleoptera;un ocelle par cote (apioninae)
 TP1A_5_A;TP1A;5;A;Bryan;Elateridae;Elateridae;Elateridae;1;;larve ;16;;coleoptera;
 TP1A_8_A;TP1A;8;A;Margaux;Insecta;Insecta;Insecta;1;;larve ;16;;insecta;
@@ -94,12 +94,12 @@ TP1A_8_A;TP1A;8;A;Margaux ;Gasteropoda;Limacidae;Limacidae;1;;;16;;gastropoda;
 TP1A_8_A;TP1A;8;A;Margaux;Arachnida;Opiliones;Phalangiidae;1;;;16;;opiliones;
 TP1B_1_A;TP1B;1;A;Jade;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
 TP1B_1_A;TP1B;1;A;Jade;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
-TP1B_1_O;TP1B;1;O;Cécile E;Arachnida;Pseudoscorpiones;Olpiidae;1;;;16;;pseudoscorpiones;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Arachnida;Pseudoscorpiones;Olpiidae;1;;;16;;pseudoscorpiones;
 TP1B_1_O;TP1B;1;O;Jade;Chilopoda;Scolopendromorpha;Scolopendromorpha;1;;;16;;chilopoda;
 TP1B_2_O;TP1B;2;O;Romane;Collembola;Collembola;Collembola;1;;;16;;collembola;
 TP1B_2_O;TP1B;2;O;Romane;Chilopoda;Geophilomorpha;Stenotaenia linearis;1;;;16;;chilopoda;
 TP1B_3_A;TP1B;3;A;Repel;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;
-TP1B_3_O;TP1B;3;O;Jérémy;Orthoptera;Orthoptera;Orthoptera;1;;;16;;orthoptera;
+TP1B_3_O;TP1B;3;O;JÃ©rÃ©my;Orthoptera;Orthoptera;Orthoptera;1;;;16;;orthoptera;
 TP1B_4_A;TP1B;4;A;Malo;Vide;Vide;Entomobryomorpha;1;;;16;;collembola;
 TP1B_4_O;TP1B;4;O;Malo;Arachnida;Araneae;Araneae;1;;;16;;araneae;
 TP1B_5_O;TP1B;5;O;Matthieu;Arachnida;Araneae;Araneae;1;;;16;;araneae;
@@ -115,21 +115,21 @@ TP1B_6_O;TP1B;6;O;Louise;Isopoda;Porcellionidae;Porcellio scaber;1;;;16;;isopoda
 TP1B_7_A;TP1B;7;A;Zora;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
 TP1B_7_A;TP1B;7;A;Zora;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
 TP1B_7_O;TP1B;7;O;Zora;Collembola;Collembola;Entomobryomorpha;1;;;16;;collembola;
-TP1B_7_O;TP1B;7;O;Zora;Arachnida;Acari;Gamasidae sp1;1;;;16;;acari;Très pigmente
+TP1B_7_O;TP1B;7;O;Zora;Arachnida;Acari;Gamasidae sp1;1;;;16;;acari;TrÃ¨s pigmente
 TP1B_7_O;TP1B;7;O;Zora;Isopoda;Philoscidae;Philoscia muscorum;1;;;16;;isopoda;
 TP1B_8_A;TP1B;8;A;Ewan;Lumbricidae;Lumbricidae;Aporrectodea caliginosa;1;;;16;;earthworm;
-TP1B_8_A;TP1B;8;A;Ewan;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;très blanc , difficile a determiner
+TP1B_8_A;TP1B;8;A;Ewan;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;trÃ¨s blanc , difficile a determiner
 TP1B_8_A;TP1B;8;A;Ewan;Chilopoda;Scolopendromorpha;Scolopendromorpha;1;;;16;;chilopoda;
 TP1B_8_O;TP1B;8;O;Ewan;Diplopoda;Julidae;Cylindroiulus;1;;;16;;diplopoda;
 TP1B_8_O;TP1B;8;O;Ewan;Collembola;Collembola;Entomobryomorpha;1;;;16;;collembola;
-TP2A_1_O;TP2A;1;O;Eléa;Collembola;Collembola;Collembola;1;;;16;;collembola;
-TP2A_1_O;TP2A;1;O;Eléa;Diptera;Diptera;Diptera;1;;;16;;diptera;
-TP2A_1_O;TP2A;1;O;Eléa;Arachnida;Opiliones;Opiliones;1;;;16;;opiliones;
-TP2A_1_O;TP2A;1;O;Eléa;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
-TP1B_1_O;TP1B;1;O;Cécile E;Coleoptera;Tenebrionidae;Tenebrionidae;1;;larve ;16;;coleoptera;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Collembola;Collembola;Collembola;1;;;16;;collembola;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Diptera;Diptera;Diptera;1;;;16;;diptera;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Arachnida;Opiliones;Opiliones;1;;;16;;opiliones;
+TP2A_1_O;TP2A;1;O;ElÃ©a;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Coleoptera;Tenebrionidae;Tenebrionidae;1;;larve ;16;;coleoptera;
 TP2A_2_A;TP2A;2;A;Lise;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
-TP2A_3_A;TP2A;3;A;Chloé D;Chilopoda;Scolopendromorpha;Cryptops parisi;1;;;16;;chilopoda;
-TP2A_3_A;TP2A;3;A;Chloé D;Hemiptera;Hemiptera;Hemiptera;1;;;16;;hemiptera;
+TP2A_3_A;TP2A;3;A;ChloÃ© D;Chilopoda;Scolopendromorpha;Cryptops parisi;1;;;16;;chilopoda;
+TP2A_3_A;TP2A;3;A;ChloÃ© D;Hemiptera;Hemiptera;Hemiptera;1;;;16;;hemiptera;
 TP2A_3_O;TP2A;3;O;Lonna;Chilopoda;Chilopoda;Chilopoda;1;;;16;;chilopoda;
 TP2A_3_O;TP2A;3;O;Lonna;Coleoptera;Elateridae;Elateridae;1;;larve ;16;;coleoptera;
 TP2A_3_O;TP2A;3;O;Lonna;Collembola;Collembola;Entomobryomorpha sp2;1;;;16;;collembola;
@@ -140,13 +140,13 @@ TP2A_4_O;TP2A;4;O;Morgane;Collembola;Collembola;Entomobryomorpha;1;;;16;;collemb
 TP2A_4_O;TP2A;4;O;Willem;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
 TP2A_5_O;TP2A;5;O;Frodello;Diplopoda;Blaniulidae;Blaniulidae;1;;;16;;diplopoda;
 TP2A_5_O;TP2A;5;O;Frodello;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
-TP2A_6_A;TP2A;6;A;Maïwenn;Arachnida;Araneae;Amaurobiidae;1;;;16;;araneae;
-TP2A_6_A;TP2A;6;A;Chloé B;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
-TP2A_6_O;TP2A;6;O;Maïwenn;Arachnida;Araneae;Agelenidae;1;;;16;;araneae;
-TP2A_6_O;TP2A;6;O;Chloé B ;Diplopoda;Chordeumatidae;Chordeumatidae;1;;;16;;diplopoda;
-TP2A_6_O;TP2A;6;O;Chloé B ;Enchytraeidae;Enchytraeidae;Enchytraeidae;1;;;16;;earthworm;
-TP2A_6_O;TP2A;6;O;Chloé B;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
-TP2A_6_O;TP2A;6;O;Chloé B;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
+TP2A_6_A;TP2A;6;A;MaÃ¯wenn;Arachnida;Araneae;Amaurobiidae;1;;;16;;araneae;
+TP2A_6_A;TP2A;6;A;ChloÃ© B;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
+TP2A_6_O;TP2A;6;O;MaÃ¯wenn;Arachnida;Araneae;Agelenidae;1;;;16;;araneae;
+TP2A_6_O;TP2A;6;O;ChloÃ© B ;Diplopoda;Chordeumatidae;Chordeumatidae;1;;;16;;diplopoda;
+TP2A_6_O;TP2A;6;O;ChloÃ© B ;Enchytraeidae;Enchytraeidae;Enchytraeidae;1;;;16;;earthworm;
+TP2A_6_O;TP2A;6;O;ChloÃ© B;Chilopoda;Geophilomorpha;Geophilomorpha;1;;;16;;chilopoda;
+TP2A_6_O;TP2A;6;O;ChloÃ© B;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
 TP1B_5_O;TP1B;5;O;Tanguy;Coleoptera;Tenebrionidae;Stenagostus rhombeus;1;;larve ;16;;coleoptera;
 TP2A_7_A;TP2A;7;A;Camille;Enchytraeidae;Enchytraeidae;Enchytraeidae;1;;;16;;earthworm;
 TP2A_7_A;TP2A;7;A;Ninon;Chilopoda;Scolopendromorpha;Cryptops parisi;1;;;16;;chilopoda;
@@ -154,18 +154,18 @@ TP2A_7_A;TP2A;7;A;Ninon;Collembola;Collembola;Entomobryomorpha sp2;1;;;16;;colle
 TP2A_7_A;TP2A;7;A;Ninon;Hymenoptera;Galliforma;Galliforme;1;;;16;;hymenoptera;Diplolepis rosae ?
 TP2A_7_A;TP2A;7;A;Ninon;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;
 TP2A_7_O;TP2A;7;O;camille;Diplopoda;Diplopoda;Diplopoda;1;;;16;;diplopoda;
-TP2A_7_O;TP2A;7;O;Camille;Coleoptera;Staphylinidae;Staphylinidae sp1;1;;;16;;coleoptera;soie epaisse surtout à la fin, largeur du corps qui diminue
-TP2A_7_O;TP2A;7;O;camille;Coleoptera;Staphylinidae;Staphylinidae sp2;1;;;16;;coleoptera;soie plus nombreuse et fine, corps de la même largeur 
+TP2A_7_O;TP2A;7;O;Camille;Coleoptera;Staphylinidae;Staphylinidae sp1;1;;;16;;coleoptera;soie epaisse surtout Ã  la fin, largeur du corps qui diminue
+TP2A_7_O;TP2A;7;O;camille;Coleoptera;Staphylinidae;Staphylinidae sp2;1;;;16;;coleoptera;soie plus nombreuse et fine, corps de la mÃªme largeur 
 TP2A_7_O;TP2A;7;O;Camille;Coleoptera;Staphylinidae;Stenus sp;1;;;16;;coleoptera;
 TP2A_8_A;TP2A;8;A;Samba;Chilopoda;Scolopendromorpha;Cryptosidae;1;;;16;;chilopoda;
 TP2A_8_A;TP2A;8;A;Samba;Chilopoda;Geophilomorpha;Geophilomorpha ;1;;;16;;chilopoda;
 TP2A_8_A;TP2A;8;A;Samba;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;
-TP2A_8_O;TP2A;8;O;Cécile;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;mature mâle
-TP2A_8_O;TP2A;8;O;Cécile;Gasteropoda;Limacidae;Limacidae;1;;;16;;gastropoda;
-TP2A_8_O;TP2A;8;O;Cécile;Chilopoda;Scolopendromorpha;Scolopendromorpha;1;;;16;;chilopoda;
-TP2A_8_O;TP2A;8;O;Cécile;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
-TP1B_2_A;TP1B;2;A;Angéla;Chilopoda;Geophilomorpha;Stenotaenia linearis;2;;adulte;32;;chilopoda;
-TP1B_2_A;TP1B;2;A;Angéla;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;2;;adulte;32;;chilopoda;
+TP2A_8_O;TP2A;8;O;CÃ©cile;Diplopoda;Julidae;Julidae;1;;;16;;diplopoda;mature mÃ¢le
+TP2A_8_O;TP2A;8;O;CÃ©cile;Gasteropoda;Limacidae;Limacidae;1;;;16;;gastropoda;
+TP2A_8_O;TP2A;8;O;CÃ©cile;Chilopoda;Scolopendromorpha;Scolopendromorpha;1;;;16;;chilopoda;
+TP2A_8_O;TP2A;8;O;CÃ©cile;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;1;;;16;;chilopoda;
+TP1B_2_A;TP1B;2;A;AngÃ©la;Chilopoda;Geophilomorpha;Stenotaenia linearis;2;;adulte;32;;chilopoda;
+TP1B_2_A;TP1B;2;A;AngÃ©la;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;2;;adulte;32;;chilopoda;
 TP1B_3_A;TP1B;3;A;Repel;Collembola;Collembola;Entomobryomorpha;2;;adulte;32;;collembola;
 TP1B_4_O;TP1B;4;O;Malo;Chilopoda;Geophilomorpha;Geophilomorpha;2;;adulte;32;;chilopoda;
 TP1B_7_A;TP1B;7;A;Zora;Chilopoda;Geophilomorpha;Stenotaenia linearis;2;;adulte;32;;chilopoda;
@@ -184,21 +184,21 @@ TP1A_7_A;TP1A;7;A;Matthis;Diplopoda;Blaniulidae;Blaniulidae;2;;;32;;diplopoda;
 TP1A_7_O;TP1A;7;O;Matthis;Arachnida;Araneae;Araneae;2;;;32;;araneae;
 TP1A_7_O;TP1A;7;O;Matthis;Hymenoptera;Formicidae;Formicidae;2;;;32;;hymenoptera;
 TP1A_7_O;TP1A;7;O;Matthis;Diplopoda;Polydesmidae;Polydesmidae;2;;;32;;diplopoda;
-TP1B_1_O;TP1B;1;O;Cécile E;Arachnida;Araneae;Araneae;2;;;32;;araneae;
-TP1B_1_O;TP1B;1;O;Cécile E;Isopoda;Oniscidae;Oniscus asellus;2;;;32;;isopoda;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Arachnida;Araneae;Araneae;2;;;32;;araneae;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Isopoda;Oniscidae;Oniscus asellus;2;;;32;;isopoda;
 TP1B_2_O;TP1B;2;O;Romane;Arachnida;Acari;Gamasidae;2;;;32;;acari;
 TP1A_6_O;TP1A;6;O;Kateryna;Coleoptera;Tenebrionidae;Tenebrionidae;2;;larve ;32;;coleoptera;
 TP1B_7_A;TP1B;7;A;Zora;Diplopoda;Chordeumatidae;Chordeumatidae;2;;;32;;diplopoda;
 TP1B_7_O;TP1B;7;O;Zora;Diplopoda;Chordeumatidae;Chordeumatidae;2;;;32;;diplopoda;
 TP2A_1_A;TP2A;1;A;Frodello;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;2;;;32;;chilopoda;
 TP2A_3_O;TP2A;3;O;Lonna;Chilopoda;Scolopendromorpha;Cryptops parisi;2;;;32;;chilopoda;
-TP1B_3_O;TP1B;3;O;Jérémy;Coleoptera;Tenebrionidae;Tenebrionidae;2;;larve ;32;;coleoptera;
+TP1B_3_O;TP1B;3;O;JÃ©rÃ©my;Coleoptera;Tenebrionidae;Tenebrionidae;2;;larve ;32;;coleoptera;
 TP2A_6_O;TP2A;6;O;Lou L;Isopoda;Oniscidae;Oniscus asellus;2;;;32;;isopoda;
 TP2A_8_A;TP2A;8;A;Samba;Diplopoda;Polydesmidae;Polydesmidae;2;;;32;;diplopoda;
 TP1A_3_O;TP1A;3;O;Matthis;Coleoptera;Tenebrionidae;Tenebrionidae;3;;adulte;48;;coleoptera;
 TP1B_4_O;TP1B;4;O;Malo;Chilopoda;Scolopendromorpha;Cryptopsidae;3;;adulte;48;;chilopoda;
 TP1A_1_A;TP1A;1;A;Nolan;Lumbricidae;Lumbricidae;Lumbricidae;3;endoge ;juvenile;48;;earthworm;
-TP1B_2_A;TP1B;2;A;Angéla;Coleoptera;Elateridae;Denticollis;3;;larve;48;;coleoptera;
+TP1B_2_A;TP1B;2;A;AngÃ©la;Coleoptera;Elateridae;Denticollis;3;;larve;48;;coleoptera;
 TP1A_1_A;TP1A;1;A;Nolan;Chilopoda;Geophilomorpha;Stigmatogaster subterranea;3;;;48;;chilopoda;
 TP1A_3_A;TP1A;3;A;Matthis;Chilopoda;Scolopendromorpha;Cryptops;3;;;48;;chilopoda;
 TP1A_3_O;TP1A;3;O;Matthis;Arachnida;Araneae;Araneae;3;;;48;;araneae;
@@ -209,19 +209,19 @@ TP1A_7_O;TP1A;7;O;Matthis;Gasteropoda;Limacidae;Limacidae;3;;;48;;gastropoda;
 TP1B_3_A;TP1B;3;A;Repel;Chilopoda;Geophilomorpha;Geophilomorpha;3;;;48;;chilopoda;
 TP1B_5_O;TP1B;5;O;Tanguy;Chilopoda;Lithobiomorpha;Lithobius aeruginosus;3;;;48;;chilopoda;
 TP1B_6_O;TP1B;6;O;Louise;Diplopoda;Julidae;Julidae;3;;;48;;diplopoda;
-TP1B_2_A;TP1B;2;A;Angéla;Coleoptera;Tenebrionidae;Blaps mucronata;4;;adulte;64;;coleoptera;
-TP1B_1_O;TP1B;1;O;Cécile E;Trichoptera;Trichoptera;Trichoptera;4;;larve;64;;trichoptera;
+TP1B_2_A;TP1B;2;A;AngÃ©la;Coleoptera;Tenebrionidae;Blaps mucronata;4;;adulte;64;;coleoptera;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Trichoptera;Trichoptera;Trichoptera;4;;larve;64;;trichoptera;
 TP1B_3_A;TP1B;3;A;Repel;Coleoptera;Elateridae;Elateridae;4;;larve;64;;coleoptera;
 TP1A_6_O;TP1A;6;O;Kateryna;Chilopoda;Scolopendromorpha;Cryptos anomalans;4;;;64;;chilopoda;
 TP1A_7_O;TP1A;7;O;Matthis;Diplopoda;Blaniulidae;Blaniulidae;4;;;64;;diplopoda;
-TP1B_3_O;TP1B;3;O;Jérémy;Chilopoda;Geophilomorpha;Geophilomorpha;4;;;64;;chilopoda;
+TP1B_3_O;TP1B;3;O;JÃ©rÃ©my;Chilopoda;Geophilomorpha;Geophilomorpha;4;;;64;;chilopoda;
 TP1B_4_O;TP1B;4;O;Malo;Arachnida;Acari;Gamasidae;4;;;64;;acari;
-TP2A_4_O;TP2A;4;O;Willem;Diplopoda;Diplopoda;Diplopoda;4;;;64;;diplopoda;3 mâles et 1 femelle
+TP2A_4_O;TP2A;4;O;Willem;Diplopoda;Diplopoda;Diplopoda;4;;;64;;diplopoda;3 mÃ¢les et 1 femelle
 TP1B_2_O;TP1B;2;O;Romane;Coleoptera;Tenebrionidae;Tenebrionidae;5;;larve;80;;coleoptera;
 TP1A_4_O;TP1A;4;O;Margaux ;Coleoptera;Tenebrionidae;Tenebrionidae;5;;larve ;80;;coleoptera;
 TP2A_8_A;TP2A;8;A;Samba;Hymenoptera;Galliforma;Galliforme;5;;;80;;hymenoptera;Diplolepis rosae ?
 TP1A_2_A;TP1A;2;A;Paul;Diptera;Diptera;Diptera sp2;6;;larve;96;;diptera;trapu, ebauches de pattes
 TP1A_6_O;TP1A;6;O;Alexandre;Diplopoda;Blaniulidae;Blaniulidae;6;;;96;;diplopoda;
-TP1B_1_O;TP1B;1;O;Cécile E;Chilopoda;Geophilomorpha;Geophilomorpha;6;;;96;;chilopoda;
+TP1B_1_O;TP1B;1;O;CÃ©cile E;Chilopoda;Geophilomorpha;Geophilomorpha;6;;;96;;chilopoda;
 TP2A_2_O;TP2A;2;O;Lise;Lumbricidae;Lumbricidae;Lumbricidae;16;endoge;juvenile;256;;earthworm;
 TP1A_3_O;TP1A;3;O;Matthis;Chilopoda;Scolopendromorpha;Cryptops;16;;;256;;chilopoda;

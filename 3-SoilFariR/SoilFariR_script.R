@@ -15,12 +15,14 @@ library(lubridate)
 library(tidyr)
 library(vegan)
 library(wesanderson)
+library(RColorBrewer)
 
 #  work on ACP now : LIBS -----------------------------------------------------------
 library(FactoMineR)
 library(factoextra)
 library(seriation)
 library(clustertend)
+library(RVAideMemoire)
 library(cluster)
 
 # import functions from SoilFariR_functions.r ---------------------------------------
@@ -33,14 +35,16 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
-tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')
-safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, sep=';')  # observations des étudiant.es
-soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, sep=';') # mine
+tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE)
+safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE)  # observations des étudiant.es
+soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE) # mine
 
 summary(tsbf_rou)
 summary(tsbf_fin)
 summary(soil)
 summary(safa_esol)
+
+
 
 #####################################################################################
 #####################################################################################
@@ -50,6 +54,15 @@ safa_esol <- milieu(safa_esol)
 safa_esol$vegetation="forest"
 safa_esol <- getmethod(safa_esol) 
 
+location<-data.frame(safa_esol$location)
+latlong <- location %>%
+  separate(safa_esol.location,
+    sep=",", into=c("latitude", "longitude"), remove=TRUE)
+safa_esol$latitude <- latlong$latitude
+safa_esol$longitude <- latlong$longitude
+
+
+
 #processing soil df to be sure
 soil <- gettaxa(soil)
 soil <- milieu(soil)
@@ -57,10 +70,21 @@ soil <- getmethod(soil)
 soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- subset(soil, is.na(soil$taxa)==FALSE)
 
-#soil$location<-as.character(soil$location)
-#soil %>%
-#  separate(soil, location,
-#    sep=",", into=c("latitude", "longitude"))
+location<-data.frame(soil$location)
+latlong <- location %>%
+  separate(soil.location,
+    sep=",", into=c("latitude", "longitude"), remove=TRUE)
+soil$latitude <- latlong$latitude
+soil$longitude <- latlong$longitude
+
+
+a <- names(soil)
+b <- names(safa_esol)
+setdiff(b, a)
+
+safari <- rbind(soil, safa_esol)
+write.csv(safari, 'safari_all_projects_dataframe.csv')
+
 
 tsbf_rou$vegetation="forest"
 
@@ -329,10 +353,60 @@ ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
 ##################################################################################
 ##################################################################################
 ##################################################################################
-# Let's get interesting
+# Let's get interesting : MULTIVARIATE ANALYSIS
 
-# retrieve species guess with SoilFariR function 'getspecies' -----------------------
-soil <- getspecies(soil)
+# firs look at quantitative variables we may be interested in :
+df_soil$method <- as.factor(df_soil$method)
+
+df_soil <- droplevels(df_soil)
+summary(df_soil)
+
+
+# Multiple Correspondance Analysis on simplified df -------------------------------
+
+ACM <- dudi.acm(df_soil, scannf=FALSE, nf=10)
+
+MVA.synt(ACM)  # percentages
+MVA.plot(ACM, byfac=TRUE, fac=df_soil$vegetation) # graphs
+
+
+
+
+# Mixed Analysis with SAFARI sampling and quantitative data -----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # working on FINLAND results only at first
 # on transects ----------------------------------------------------------------------
