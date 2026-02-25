@@ -1,0 +1,21 @@
+# A. PRETAT 25/02/2026
+# FETCHING CLIMATE DATA COPERNICUS
+library(ncdf4)
+library(terra) # to read the netCDF files
+library(lubridate) # to deal with dates and times
+library(dplyr) # to wrangle and tidy the data
+library(tidyr) # to wrangle and tidy the data
+library(ggplot2) # to make statis maps
+library(gganimate) # to make a temporal gif of climate variation
+library(rcontroll) # to generate TROLL climate inputs
+
+library(ecmwfr) # to request data from Copernicus
+library(osmdata) # to get bounding box from the study area
+library(lutz) # to get time zone
+library(nominatimlite) # to get coordinates from the study area
+library(leaflet) # to make interactive maps
+library(sf) # to extract coordinates from spatial objects
+
+# access key -----------------------------------------------------------------------
+setwd('D:/GitHub/AI4SH')
+rast('temperature.nc')
