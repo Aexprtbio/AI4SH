@@ -18,4 +18,14 @@ library(sf) # to extract coordinates from spatial objects
 
 # access key -----------------------------------------------------------------------
 setwd('D:/GitHub/AI4SH')
-rast('temperature.nc')
+
+
+
+
+
+raster <- terra::rast('temperature_and_moisture.nc')
+
+matrixcoord <- crds(raster)
+matrixcoord <- as.data.frame(matrixcoord)
+coords <- matrixcoord %>%
+	unite(col="locations", x, y, sep=",")
