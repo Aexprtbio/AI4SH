@@ -10,9 +10,9 @@ getuser <- function(dataset) {
         grepl("angemouth", user, ignore.case = TRUE) ~ "Angelique",
         grepl("eric", user, ignore.case = TRUE) ~ "Eric",
         grepl("pirajeths", user, ignore.case = TRUE) ~ "Pirajeths",
-        grepl("alex", user, ignore.case = TRUE) ~ "Alex",
+        grepl("laurence", description, ignore.case = TRUE) ~ "Laurence",
         grepl("Jerome", description, ignore.case = TRUE) ~ "Jerome",
-        grepl("laurence", description, ignore.case = TRUE) ~ "Dacar",
+        grepl("alex", user, ignore.case = TRUE) ~ "Alex",
         grepl("collector1", user, ignore.case = TRUE) ~ "Pierre",
         grepl("collector2", user, ignore.case = TRUE) ~ "Paul",
         grepl("collector3", user, ignore.case = TRUE) ~ "Jacques"      )

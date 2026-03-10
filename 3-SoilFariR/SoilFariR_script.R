@@ -117,8 +117,6 @@ safari$taxa <- as.factor(safari$taxa)
 safari$observer <- as.factor(safari$observer)
 safari$saf_method <- as.factor(safari$saf_method)
 
-
-safari <- subset(safari, is.na(safari$transect_id)!=TRUE)
 safari <- subset(safari, is.na(safari$taxa)!=TRUE)
 safari <- subset(safari, is.na(safari$observer)!=TRUE)
 safari$latitude <- as.numeric(safari$latitude)
@@ -253,34 +251,40 @@ rarecurve(commucoll3, step=1,
 
 
 # Whole dataset - method x taxa -----------------------------------------------------------------
-commu <- table(soil$saf_method, soil$taxa)
+commu <- table(safari$saf_method, safari$taxa)
 rarecurve(commu, step=1)
 
 
 # need to make a count of taxa per transect id for community matrix --------------
 
-soil$taxa <- as.factor(soil$taxa)
-soil$transect_id <- as.factor(soil$transect_id)
-soil$observer <- as.factor(soil$observer)
+safari$taxa <- as.factor(safari$taxa)
+safari$transect_id <- as.factor(safari$transect_id)
+safari$observer <- as.factor(safari$observer)
 
 
 # community matrix per observer --------------------------------------------------
 
 # Créer une variable combinée
-soil$obs_transect <- paste(soil$observer, soil$transect_id, sep = "_")
+safari$obs_transect <- paste(safari$observer, safari$transect_id, sep = "_")
 
 # Table de contingence avec la variable combinée
-obs_trans <- table(soil$obs_transect, soil$taxa)
+safcon <- table(safari$obs_transect, safari$taxa)
+
+
+# Working with vegan::decostand --------------------------------------------------
+safcon.hell <- decostand(safcon, method='hellinger')
+
+
 
 # Metadata avec les informations séparées
 metadata <- data.frame(
-  "Site" = rownames(obs_trans),
-  "observer" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 1),
-  "transect_id" = sapply(strsplit(rownames(obs_trans), "_"), `[`, 2)
+  "Site" = rownames(safcon),
+  "observer" = sapply(strsplit(rownames(safcon), "_"), `[`, 1),
+  "transect_id" = sapply(strsplit(rownames(safcon), "_"), `[`, 2)
 )
 
 # Courbes de raréfaction
-plotobs <- rarecurve(obs_trans, step=2, tidy=TRUE,
+plotobs <- rarecurve(safcon.hell, step=2, tidy=TRUE,
                      xlab="Courbe d'accumulation de la diversité de taxas") %>%
   left_join(metadata, by = "Site")
 
@@ -306,10 +310,10 @@ ggplot(plotobs) +
 
 # same but with original taxas --------------------------------------------------
 
-soil$taxon_id <- as.factor(soil$ident_taxon_ids)
+safari$taxon_id <- as.factor(safari$ident_taxon_ids)
 
 
-obs_trans <- table(soil$obs_transect, soil$taxon_id)
+obs_trans <- table(safari$obs_transect, safari$taxon_id)
 
 # Metadata avec les informations séparées
 metadata <- data.frame(
@@ -328,8 +332,7 @@ plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
 x11()
 ggplot(plotobs2) +
   geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
-#  geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
-
+  geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
   facet_wrap(~transect_id) +
   theme_bw() +
   labs(
@@ -389,14 +392,20 @@ ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
 
 
 
-
-
-
-
 ##################################################################################
 ##################################################################################
 ##################################################################################
 # Let's get interesting : MULTIVARIATE ANALYSIS
+# Table de contingence avec la variable combinée
+safcon <- table(safari$obs_transect, safari$taxa)
+
+
+# Working with vegan::decostand --------------------------------------------------
+safcon.hell <- decostand(safcon, method='hellinger') # transformation
+
+safcon.hell <- scale(safcon.hell) # centrer / réduire values
+
+
 
 # firs look at quantitative variables we may be interested in :
 df_soil$method <- as.factor(df_soil$method)
