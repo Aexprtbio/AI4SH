@@ -99,7 +99,7 @@ c <- names(safa_fin)
 setdiff(b, a)
 setdiff(b, c)
 
-safari <- rbind(soil, safa_fin)
+safari <- rbind(soil, safa_fin, safa_esol)
 
 safari$time_observed_at <- as.character(safari$time_observed_at)
 safari$observed_on_lub <- dmy(safari$observed_on)
@@ -404,6 +404,28 @@ safcon <- table(safari$obs_transect, safari$taxa)
 safcon.hell <- decostand(safcon, method='hellinger') # transformation
 
 safcon.hell <- scale(safcon.hell) # centrer / réduire values
+
+ACP <- rda(safcon.hell)
+MVA.synt(ACP)
+stressplot(ACP)
+
+#graph
+par(mfrow=c(2,2))
+MVA.plot(ACP, col=c("red", "darkolivegreen2"))
+MVA.plot(ACP, xax=3, col=c("red", "darkolivegreen2"))
+MVA.plot(ACP, xax=4, col=c("red", "darkolivegreen2"))
+MVA.plot(ACP, yax=4, col=c("red", "darkolivegreen2"))
+
+x11()
+par(mfrow=c(2,2))
+MVA.plot(ACP, "corr")
+MVA.plot(ACP, "corr", xax=3)
+MVA.plot(ACP, "corr", xax=4)
+MVA.plot(ACP, "corr", yax=4)
+
+
+
+
 
 
 
