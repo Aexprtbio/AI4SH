@@ -149,8 +149,8 @@ colnames(tempesol)<-c("ID", "taxa", "vegetation", "observer","method")
 df_soil <- rbind(tempfin, temprou, tempsaf, tempesol)
 
 
-################################################################################
-################################################################################
+#########################################################################################
+#########################################################################################
 # try plots ----------------------------------------------------------------------
 # Morphological diversity in TSBF Rouen
 p <- ggplot(tsbf_rou, aes(y=gsmf_taxa, fill=gsmf_taxa))
@@ -220,10 +220,7 @@ soil <- soil %>%
 commtt <- table(df_soil$vegetation, df_soil$taxa)
 plotobs <- rarecurve(commtt)
 
-
-#
 # need to make a count of taxa per sample order and transect id for community matrix --------------
-
 # rarecurve TSBF finlande
 
 commTSBfin <- table(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa)
@@ -250,6 +247,7 @@ rarecurve(commucoll3, step=1,
   xlab="Rarefaction curves, 2025 Finland LUKE team \n collector3 - Cropfields", ylim=c(1,10))
 
 
+#################################################################################################
 # Whole dataset - method x taxa -----------------------------------------------------------------
 commu <- table(safari$saf_method, safari$taxa)
 rarecurve(commu, step=1)
@@ -264,17 +262,15 @@ safari$observer <- as.factor(safari$observer)
 
 # community matrix per observer --------------------------------------------------
 
+
+###################################################################################
+###################################################################################
 # Créer une variable combinée
 safari$obs_transect <- paste(safari$observer, safari$transect_id, sep = "_")
-
 # Table de contingence avec la variable combinée
-safcon <- table(safari$obs_transect, safari$taxa)
-
-
+safcon <- table(safari$obs_transect, safari$taxa
 # Working with vegan::decostand --------------------------------------------------
 safcon.hell <- decostand(safcon, method='hellinger')
-
-
 
 # Metadata avec les informations séparées
 metadata <- data.frame(
@@ -396,10 +392,15 @@ ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
 ##################################################################################
 ##################################################################################
 # Let's get interesting : MULTIVARIATE ANALYSIS
-# Table de contingence avec la variable combinée
+# Table de contingence avec la variable combinée - SAFARI
 safcon <- table(safari$obs_transect, safari$taxa)
 
+# table de contingence - TSBF
+df_soil <- subset(df_soil, method=="TSBF")
+df_soil$obs_transect <- paste(df_soil$observer, df_soil$ID, sep="_")
+tsbfcon <- table(df_soil$obs_transect, df_soil$taxa)
 
+################################ SOILFARI ########################################
 # Working with vegan::decostand --------------------------------------------------
 safcon.hell <- decostand(safcon, method='hellinger') # transformation
 
@@ -423,8 +424,11 @@ MVA.plot(ACP, "corr", xax=3)
 MVA.plot(ACP, "corr", xax=4)
 MVA.plot(ACP, "corr", yax=4)
 
+############################### TSBF #############################################
+# Working with vegan::decostand --------------------------------------------------
 
 
+# co inertia analysis --------------------------------------------------------------
 
 
 
