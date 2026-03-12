@@ -32,3 +32,21 @@ source('SoilFariR_functions.r')
 # import up to date DataFrame -------------------------------------------------------
 setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
+safari <- read.csv2('safari_all_projects_dataframe.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
+
+commu <- table(safari$transect_id, safari$taxa)
+commu <- decostand(commu, method="pa")
+
+species <- data.frame(transect_id=rownames(commu))
+species$transect_id<-as.factor(species$transect_id)
+species$abundance <- rowSums(commu)
+summary(species)
+
+################################ PLOTS ################################################
+
+plot(species$abundance~species$transect_id)
+
+
+######################## BETA DIVERSITY INDEXES #######################################
+
+########################### SORENSEN ##################################################
