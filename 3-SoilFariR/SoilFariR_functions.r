@@ -155,10 +155,10 @@ milieu <- function(dataset) {
 				grepl("Ro", transect_id, ignore.case=TRUE) ~ 'forest',
 				grepl("forest", description, ignore.case=TRUE) ~ 'forest',
 				grepl("Helsinki", observed_time_zone, ignore.case=TRUE) ~ 'crop',
-				grepl("meadow", transect_id, ignore.case=TRUE) ~ 'grassland'),
-				NA_character_
-				
-			)
+				grepl("meadow", transect_id, ignore.case=TRUE) ~ 'grassland',
+        grepl("angelique|eric|laurence|jerome|alex", observer, ignore.case=TRUE) ~ "forest"
+        )
+		)
 		return(dataset)
 }
 

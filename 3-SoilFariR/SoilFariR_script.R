@@ -1,7 +1,7 @@
 # CREATED ON 09 MAY 2025
 # PRÉTAT
 
-# Last update : 24/02/2026
+# Last update : 12/03/2026
 
 rm(list=ls())
 
@@ -80,7 +80,7 @@ safa_fin$longitude <- latlong$longitude
 
 # processing soil df to be sure -----------------------------------------------------
 soil <- gettaxa(soil)
-soil <- milieu(soil)
+#soil <- milieu(soil)
 soil <- getmethod(soil) 
 #soil <- subset(soil, is.na(soil$transect_id)==FALSE)
 soil <- subset(soil, is.na(soil$taxa)==FALSE)
@@ -97,11 +97,20 @@ a <- names(soil)
 b <- names(safa_esol)
 c <- names(safa_fin)
 setdiff(b, a)
+setdiff(a, b)
 setdiff(b, c)
+#safa_esol <- safa_esol[, -81]
+#safa_fin <- safa_fin[, -82]
+setdiff(b, a)
 
 safari <- rbind(soil, safa_fin, safa_esol)
 
+#################### correcting things about time column ##########################
+
 safari$time_observed_at <- as.character(safari$time_observed_at)
+safari$time <- substr(safari$time_observed_at, start=12, stop=16)
+safari$time <- hm(safari$time)
+safari$time <- period_to_seconds(safari$time)
 safari$observed_on_lub <- dmy(safari$observed_on)
 safari$day <- day(safari$observed_on_lub)
 safari$month <- month(safari$observed_on_lub)
@@ -109,6 +118,7 @@ safari$year <- year(safari$observed_on_lub)
 
 safari <- getuser(safari)
 safari <- gettransect(safari)
+#safari <- lapsed_time(safari)
 
 safari$month <- as.factor(safari$month)
 safari$year <- as.factor(safari$year)
@@ -121,9 +131,10 @@ safari <- subset(safari, is.na(safari$taxa)!=TRUE)
 safari <- subset(safari, is.na(safari$observer)!=TRUE)
 safari$latitude <- as.numeric(safari$latitude)
 safari$longitude <- as.numeric(safari$longitude)
+safari <- milieu(safari)
 summary(safari)
 
-
+# save dataframe
 write.csv(safari, 'safari_all_projects_dataframe.csv')
 
 
@@ -268,7 +279,7 @@ safari$observer <- as.factor(safari$observer)
 # Créer une variable combinée
 safari$obs_transect <- paste(safari$observer, safari$transect_id, sep = "_")
 # Table de contingence avec la variable combinée
-safcon <- table(safari$obs_transect, safari$taxa
+safcon <- table(safari$obs_transect, safari$taxa)
 # Working with vegan::decostand --------------------------------------------------
 safcon.hell <- decostand(safcon, method='hellinger')
 
@@ -280,7 +291,7 @@ metadata <- data.frame(
 )
 
 # Courbes de raréfaction
-plotobs <- rarecurve(safcon.hell, step=2, tidy=TRUE,
+plotobs <- rarecurve(safcon, step=2, tidy=TRUE,
                      xlab="Courbe d'accumulation de la diversité de taxas") %>%
   left_join(metadata, by = "Site")
 
@@ -351,39 +362,74 @@ ggplot(plotobs2) +
 # on the Y axis => the number of taxas found
 # a different curve per transect
 
-soil <- lapsed_time(soil)
+# Créer une variable combinée
+safari$obs_transect <- paste(safari$observer, safari$transect_id, sep = "_")
+safari$obs_trans_time <- paste(safari$obs_transect, safari$time, sep = ".")
 
-# taxa as proposed on GSMF dataset
-soil <- soil %>%
-  arrange(observed_on_string, observer, transect_id) %>%
-  group_by(observer, transect_id) %>%
-  mutate(obs_id = row_number()) %>%
-  mutate(cum_taxa = sapply(1:n(), function(i) n_distinct(taxa[1:i])),
-         cum_indiv = 1:n())
+safari <- safari[order(safari$time),]
+safari <- safari[order(safari$obs_transect),]
+# Table de contingence avec la variable combinée
+safcon <- table(safari$obs_transect, safari$taxa)
 
+# Metadata avec les informations séparées
+metadata <- data.frame(
+  "Site" = rownames(safcon),
+  "observer" = sapply(strsplit(rownames(safcon), "_"), `[`, 1),
+  "transect_id" = sapply(strsplit(rownames(safcon), "_"), `[`, 2)
+)
 
-setwd('D:/GitHub/AI4SH/')
-write.csv(soil, 'soil_for_mod.csv')
+plotobs <- rarecurve(safcon, step=1, tidy=TRUE,
+                     xlab="Courbe d'accumulation de la diversité de taxas") %>%
+  left_join(metadata, by = "Site")
 
-soil_ord <- soil %>%
-  arrange(transect_id, lapsed_time)
-
-
+plotobs <- cbind(plotobs, safari$time)
+colnames(plotobs[,6]) <- "time"
 
 x11()
-ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
+ggplot(plotobs, aes(x = safari$time, y = Species, color = transect_id)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ observer) +
   labs(
     title = "Courbe d'accumulation de la biodiversité",
     subtitle = "Taxa en fonction du nombre d'individus par jour et observateur",
-    x = "Nombre cumulé d'individus observés",
+    x = "temps en secondes",
     y = "Richesse spécifique (taxa uniques)") +
   theme_minimal()
 
 
+########################### Vegetation and time ######################################
+# Ok now the same with vegetation
+safari$obs_veg <- paste(safari$observer, safari$vegetation, sep = "_")
 
+safari <- safari[order(safari$time),]
+safari <- safari[order(safari$obs_veg),]
+# Table de contingence avec la variable combinée
+safcon <- table(safari$obs_veg, safari$taxa)
 
+# Metadata avec les informations séparées
+metadata <- data.frame(
+  "Site" = rownames(safcon),
+  "observer" = sapply(strsplit(rownames(safcon), "_"), `[`, 1),
+  "vegetation" = sapply(strsplit(rownames(safcon), "_"), `[`, 2)
+)
+
+plotobs <- rarecurve(safcon, step=1, tidy=TRUE,
+                     xlab="Courbe d'accumulation de la diversité de taxas") %>%
+  left_join(metadata, by = "Site")
+
+time <- safari$time
+plotobs <- cbind(plotobs, time)
+
+x11()
+ggplot(plotobs, aes(x = time, y = Species, color = observer)) +
+  geom_line(linewidth = 1.2) +
+  facet_wrap(~ vegetation) +
+  labs(
+    title = "Courbe d'accumulation de la biodiversité",
+    subtitle = "Taxa en fonction du nombre d'individus par jour et observateur",
+    x = "temps en secondes",
+    y = "Richesse spécifique (taxa uniques)") +
+  theme_minimal()
 
 
 
@@ -395,7 +441,7 @@ ggplot(soil_ord, aes(x = lapsed_time, y = cum_taxa, color = transect_id)) +
 # Table de contingence avec la variable combinée - SAFARI
 safcon <- table(safari$obs_transect, safari$taxa)
 
-# table de contingence - TSBF
+# table de contingence variable combinée - TSBF
 df_soil <- subset(df_soil, method=="TSBF")
 df_soil$obs_transect <- paste(df_soil$observer, df_soil$ID, sep="_")
 tsbfcon <- table(df_soil$obs_transect, df_soil$taxa)
@@ -406,30 +452,45 @@ safcon.hell <- decostand(safcon, method='hellinger') # transformation
 
 safcon.hell <- scale(safcon.hell) # centrer / réduire values
 
-ACP <- rda(safcon.hell)
-MVA.synt(ACP)
-stressplot(ACP)
+ACPsaf <- rda(safcon.hell)
+MVA.synt(ACPsaf)
+stressplot(ACPsaf)
 
 #graph
 par(mfrow=c(2,2))
-MVA.plot(ACP, col=c("red", "darkolivegreen2"))
-MVA.plot(ACP, xax=3, col=c("red", "darkolivegreen2"))
-MVA.plot(ACP, xax=4, col=c("red", "darkolivegreen2"))
-MVA.plot(ACP, yax=4, col=c("red", "darkolivegreen2"))
+MVA.plot(ACPsaf, col=c("red", "darkolivegreen2"))
+MVA.plot(ACPsaf, xax=3, col=c("red", "darkolivegreen2"))
+MVA.plot(ACPsaf, xax=4, col=c("red", "darkolivegreen2"))
+MVA.plot(ACPsaf, yax=4, col=c("red", "darkolivegreen2"))
 
 x11()
 par(mfrow=c(2,2))
-MVA.plot(ACP, "corr")
-MVA.plot(ACP, "corr", xax=3)
-MVA.plot(ACP, "corr", xax=4)
-MVA.plot(ACP, "corr", yax=4)
+MVA.plot(ACPsaf, "corr")
+MVA.plot(ACPsaf, "corr", xax=3)
+MVA.plot(ACPsaf, "corr", xax=4)
+MVA.plot(ACPsaf, "corr", yax=4)
 
 ############################### TSBF #############################################
 # Working with vegan::decostand --------------------------------------------------
+tsbfcon.hell <- decostand(tsbfcon, method='hellinger') # transformation
+
+# attention, a few columns appear to be empty, need to remove them
+tsbfcon.hell <- scale(tsbfcon.hell) # centrer / réduire values
+tsbfcon.hell <- tsbfcon.hell[,-c(23:26)]
+
+ACPtsbf <- rda(tsbfcon.hell)
+MVA.synt(ACPtsbf)
+stressplot(ACPtsbf)
 
 
-# co inertia analysis --------------------------------------------------------------
 
+
+
+
+######################### co inertia analysis ####################################
+ACPsaf.bis <- to.dudi(ACPsaf)
+ACPtsbf.bis <- to.dudi(ACPtsbf)
+CIA <- coinertia(ACPsaf, ACPtsbf, scannf=FALSE)
 
 
 

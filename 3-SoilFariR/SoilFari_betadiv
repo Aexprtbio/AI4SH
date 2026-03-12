@@ -1,0 +1,34 @@
+# CREATED ON 12 mar 2026
+# PRÉTAT
+
+# Last update : 12/03/2026
+
+rm(list=ls())
+
+# libraries --------------------------------------------------------------------------
+library(ade4)
+library(car)
+library(dplyr)
+library(ggplot2)
+library(hms)
+library(lubridate)
+library(tidyr)
+library(vegan)
+library(wesanderson)
+library(RColorBrewer)
+
+#  work on ACP now : LIBS -----------------------------------------------------------
+library(FactoMineR)
+library(factoextra)
+library(seriation)
+library(clustertend)
+library(RVAideMemoire)
+library(cluster)
+
+# import functions from SoilFariR_functions.r ---------------------------------------
+setwd('D:/GitHub/AI4SH/3-SoilFariR')
+source('SoilFariR_functions.r')
+
+# import up to date DataFrame -------------------------------------------------------
+setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
+
