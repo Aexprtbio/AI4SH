@@ -1,5 +1,5 @@
-# R functions for the safari script
-
+# R functions for the safari script -------------------------------------
+####################### Processing data #################################
 # getuser : retrieve user from known observers in the safari protocol
 library(dplyr)
 
@@ -20,10 +20,7 @@ getuser <- function(dataset) {
   return(dataset)
 }
 
-
-
 #function for inaturalist to find which method was used:
-
 getmethod <- function(dataset) {
 	dataset <- dataset %>%
     mutate(
@@ -37,11 +34,8 @@ getmethod <- function(dataset) {
 
 }
 
-
 # now we create a func to auto-assignate Tribes with GSMF taxa groups
-
 # correspondances
-
 # 47118 = Araneae
 # 48147 = Isopoda
 # 47208 = Coleoptera
@@ -81,13 +75,8 @@ gettaxa <- function(dataset){
 			)
 }
 
-
-
 ############################################################
 # Working for Finland obs and transect ids
-
-# okay let's build a loop
-
 library(dplyr)
 library(stringr)
 
@@ -103,10 +92,8 @@ gettransect <- function(dataset) {
     return(dataset)
 }
 
-
 #############################################################
 # Build a function to get the order in which samples are found
-
 get.sorder <- function(dataset){
 	dataset <- dataset %>%
 		mutate(
@@ -122,13 +109,8 @@ get.sorder <- function(dataset){
 
 }
 
-
-
-
-
 #############################################################
 # Function calculating time since first photo
-
 lapsed_time <- function(dataset) {
   dataset <- dataset %>%
     arrange(transect_id, time) %>%
@@ -142,12 +124,8 @@ lapsed_time <- function(dataset) {
   return(dataset)
 }
 
-
-
-
 #############################################################
 # Function retrieving habitats when possible
-
 milieu <- function(dataset) {
 	dataset <- dataset %>%
 		mutate(
@@ -162,14 +140,10 @@ milieu <- function(dataset) {
 		return(dataset)
 }
 
-
-
 ############################################################
 # Get latin name for the species_guess on iNaturalist
 library(jsonlite)
 library(dplyr)
-
-
 get.species <- function(dataset){
 	dataset<-dataset %>%
 	mutate(
@@ -187,7 +161,6 @@ library(dplyr)
 library(purrr)
 library(jsonlite)
 library(stringr)
-
 get.family <- function(dataset) {
   dataset <- dataset %>%
     mutate(
@@ -231,11 +204,69 @@ get.family <- function(dataset) {
 }
 
 # Assuming 'identifications' is a column of JSONs
-
-
 get.filter <- function(dataset){
 	dataset <- dataset %>%
   filter(!is.na(identifications) & grepl("\\]$", identifications))
 
+
+}
+
+
+########################## Create sorensen matrix #################################
+
+sorensen <- function(dataset, matrice, transect=transect_id){
+  #créer une matrice aux dimensions des noms de transects
+  sormat <- matrix(nrow=length(levels(dataset$transect)), 
+    ncol=length(levels(dataset$transect)), 
+    dimnames=list(levels(dataset$transect),levels(dataset$transect)))
+
+  print(paste("Dimensions of end matrix: ", dim(sormat)[1], "x", dim(sormat)[2]))
+  i=1
+  j=1
+  x = 1
+  y = 1
+  dims = dim(matrice)
+  print(paste("Dimensions in entry matrix: ", dims[1], "x", dims[2]))
+  print("---------------------------------------------------")
+
+  #assigner à chaque case de la matrice le résultat de l'indice de sorensen
+  while (i < dims[1]+1){
+    S1 = 0
+    S2 = 0
+    c = 0
+
+    # values for sorensen matrix coordinates
+    # reset values for communities
+    while (j < dims[2]+1){
+      # if else
+      print(paste("commu 1:", matrice[i,j], "commu 2:", matrice[i+1,j]))
+      if (matrice[i,j]*matrice[i+1,j] > 0){
+        S1 = S1 + 1
+        S2 = S2 + 1
+        c = c + 1
+      }
+      else if (matrice[i,j] > matrice[i+1,j]){
+        S1 = S1 + 1
+        S2 = S2
+        c = c
+      }
+      else if (matrice[i,j] < matrice[i+1,j]){
+        S1 = S1
+        S2 = S2 + 1
+        c = c
+      }
+      j = j + 1
+      print(paste("S1: ", S1, "S2: ", S2, "c: ", c))
+
+
+    }
+    sorensen <- ((2*c) / (S1+S2))
+    print(sorensen)
+    sormat[x,y] <- sorensen
+    y = y + 1
+    x = x + 1
+    i=i+1
+  }
+  return(sormat)
 
 }

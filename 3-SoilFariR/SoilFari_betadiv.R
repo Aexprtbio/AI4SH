@@ -40,6 +40,8 @@ commu <- decostand(commu, method="pa")
 species <- data.frame(transect_id=rownames(commu))
 species$transect_id<-as.factor(species$transect_id)
 species$abundance <- rowSums(commu)
+
+
 summary(species)
 
 ################################ PLOTS ################################################
@@ -50,3 +52,11 @@ plot(species$abundance~species$transect_id)
 ######################## BETA DIVERSITY INDEXES #######################################
 
 ########################### SORENSEN ##################################################
+
+soren <- matrix(nrow=length(levels(safari$transect_id)), 
+	ncol=length(levels(safari$transect_id)), 
+	dimnames=list(levels(safari$transect_id),levels(safari$transect_id)))
+
+# calculate sorensen index on the matrix (so pairwise) --------------------------------
+
+sorensen(safari, commu)
