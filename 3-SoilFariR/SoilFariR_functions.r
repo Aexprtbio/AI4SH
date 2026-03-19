@@ -214,59 +214,78 @@ get.filter <- function(dataset){
 
 ########################## Create sorensen matrix #################################
 
+
+
+
 sorensen <- function(dataset, matrice, transect=transect_id){
   #créer une matrice aux dimensions des noms de transects
-  sormat <- matrix(nrow=length(levels(dataset$transect)), 
-    ncol=length(levels(dataset$transect)), 
-    dimnames=list(levels(dataset$transect),levels(dataset$transect)))
-
-  print(paste("Dimensions of end matrix: ", dim(sormat)[1], "x", dim(sormat)[2]))
   i=1
   j=1
-  x = 1
-  y = 1
+  k = i+1
   dims = dim(matrice)
   print(paste("Dimensions in entry matrix: ", dims[1], "x", dims[2]))
+  sormat <- matrix(nrow = length(levels(dataset$transect)), ncol=0)
+
   print("---------------------------------------------------")
 
   #assigner à chaque case de la matrice le résultat de l'indice de sorensen
   while (i < dims[1]+1){
-    S1 = 0
-    S2 = 0
-    c = 0
+    sorensen <- matrix(nrow = length(levels(dataset$transect)), ncol=1)
+    
+    for (k in 2:dims[1]-1){
+      S1 = 0
+      S2 = 0
+      c = 0
 
-    # values for sorensen matrix coordinates
-    # reset values for communities
-    while (j < dims[2]+1){
-      # if else
-      print(paste("commu 1:", matrice[i,j], "commu 2:", matrice[i+1,j]))
-      if (matrice[i,j]*matrice[i+1,j] > 0){
-        S1 = S1 + 1
-        S2 = S2 + 1
-        c = c + 1
+
+      com1<-rowSums(matrice)[i]
+      com2<-rowSums(matrice)[k]
+      transect_i <- rownames(matrice)[i]
+      transekt <- rownames(matrice)[k]
+      print(paste(transect_i, com1, transekt, com2))
+
+
+      # values for sorensen matrix coordinates
+      # reset values for communities
+      for (j in 1:dims[2]){
+        # if else
+        if (matrice[i,j]*matrice[k,j] > 0){
+          S1 = S1 + 1
+          S2 = S2 + 1
+          c = c + 1
+        }
+        else if (matrice[i,j] > matrice[k,j]){
+          S1 = S1 + 1
+          S2 = S2
+          c = c
+        }
+        else if (matrice[i,j] < matrice[k,j]){
+          S1 = S1
+          S2 = S2 + 1
+          c = c
+        }
+        j = j + 1
       }
-      else if (matrice[i,j] > matrice[i+1,j]){
-        S1 = S1 + 1
-        S2 = S2
-        c = c
-      }
-      else if (matrice[i,j] < matrice[i+1,j]){
-        S1 = S1
-        S2 = S2 + 1
-        c = c
-      }
-      j = j + 1
       print(paste("S1: ", S1, "S2: ", S2, "c: ", c))
 
+      #if no species in common in community 1 and 2: 
+      if (c == 0 | S1+S2 == 0){    
+        sorensen[k,1] <- 0
 
+      }
+      # else calculation of sorensen index
+      else {
+        sorensen[k,1] <- ((2*c) / (S1+S2))
+
+      }
+#      rownames(sorensen)[i]<-transect_i
+#      rownames(sorensen)[k]<-transekt
+      k=k+1
     }
-    sorensen <- ((2*c) / (S1+S2))
-    print(sorensen)
-    sormat[x,y] <- sorensen
-    y = y + 1
-    x = x + 1
+    sormat <- cbind(sormat, sorensen)
+    sormat[i,i] <- NA
     i=i+1
-  }
-  return(sormat)
+  }  
+    return(sormat)
 
 }

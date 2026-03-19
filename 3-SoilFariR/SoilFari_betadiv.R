@@ -9,6 +9,7 @@ rm(list=ls())
 library(ade4)
 library(car)
 library(dplyr)
+library(igraph)
 library(ggplot2)
 library(hms)
 library(lubridate)
@@ -59,4 +60,17 @@ soren <- matrix(nrow=length(levels(safari$transect_id)),
 
 # calculate sorensen index on the matrix (so pairwise) --------------------------------
 
-sorensen(safari, commu)
+sor <- sorensen(safari, commu)
+colnames(sor)<-levels(safari$transect_id)
+rownames(sor)<-levels(safari$transect_id)
+sor[1,] <- sor[,1]
+
+
+
+
+################################ GRAPH OF NETWORKSSSS #################################
+
+diag(sor)=0
+g <- graph_from_adjacency_matrix(sor, mode='undirected', weighted=TRUE)
+
+plot(g)
