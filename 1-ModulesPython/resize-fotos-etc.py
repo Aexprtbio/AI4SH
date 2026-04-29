@@ -4,10 +4,11 @@
 # 
 
 #!/usr/bin/python
-from PIL import Image
+from PIL import Image, ExifTags
 import os, sys
+import piexif
 
-path = "D:/AIFSH-Archive/AI4SH/2 - terrain_safari/all_avril2026/ALEX/"
+path = "D:/AIFSH-Archive/AI4SH/2 - terrain_safari/testspy/"
 dirs = os.listdir(path)
 
 pathos = list()
@@ -30,4 +31,27 @@ def resize():
                 imResize.save(f + ' resized.jpg', 'JPEG', quality=90)
         i=i+1
 
-resize()
+
+def metacopy():
+    i=0
+    while i < len(pathos):
+        for item in os.listdir(pathos[i]):
+            print(pathos[i]+item)
+            pouet=pathos[i]+item
+            if 'resized' in pouet:
+                pathexif = pouet.replace(' resized', '')
+                imexif = Image.open(pathexif)
+                exif = imexif.getexif()
+                imres = Image.open(pouet)
+                
+                # Check Exif TAGS in each image to retrieve DateTime value
+                for key, val in exif.items():
+                    if key in ExifTags.TAGS:
+                        #if ExifTags.TAGS[key]=='DateTime':
+                        print(f'{ExifTags.TAGS[key]}:{val}')
+                
+                imres.exifdata = exif.items
+                imres.save(pouet, 'JPEG')
+        i=i+1
+
+metacopy()
