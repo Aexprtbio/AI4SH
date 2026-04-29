@@ -35,6 +35,8 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 
 safari <- read.csv2('safari_all_projects_dataframe.csv', h=TRUE, stringsAsFactor=TRUE, sep=',')
 
+safari <- subset(safari, is.na(safari$transect_id)!=TRUE)
+
 commu <- table(safari$transect_id, safari$taxa)
 commu <- decostand(commu, method="pa")
 
@@ -69,8 +71,23 @@ sor[1,] <- sor[,1]
 
 
 ################################ GRAPH OF NETWORKSSSS #################################
-
+# igraph
 diag(sor)=0
-g <- graph_from_adjacency_matrix(sor, mode='undirected', weighted=TRUE)
+sor[is.na(sor)]<-0
+g <- graph_from_adjacency_matrix(sor, mode='upper', weighted=TRUE, diag=TRUE)
 
-plot(g)
+edge_attr(g)
+E(g)$color <- 'royalblue'
+
+all(nzs(sor[upper.tri(sor)]) == sort(E(g6)$weight))
+
+plot(g, layout=layout_with_kk(g), 
+	edge.width=E(g)$weight*5,
+	mark.expand=15)
+
+
+# visNetwork
+
+library(visNetwork)
+
+visNetwork(sor)

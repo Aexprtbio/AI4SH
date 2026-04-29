@@ -8,6 +8,8 @@ rm(list=ls())
 # libraries --------------------------------------------------------------------------
 library(ade4)
 library(car)
+library(plyr)
+
 library(dplyr)
 library(ggplot2)
 library(hms)
@@ -145,29 +147,39 @@ tsbf_rou$vegetation="forest"
 temprou <- data.frame(tsbf_rou$groupe_tp, tsbf_rou$gsmf_taxa, tsbf_rou$vegetation, tsbf_rou$etudiant)
 tempfin <- data.frame(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa, tsbf_fin$vegetation, tsbf_fin$observer)
 tempsaf <- data.frame(safari$transect_id, safari$taxa, safari$vegetation, safari$observer)
-tempesol <- data.frame(safa_esol$transect_id, safa_esol$taxa, safa_esol$vegetation, safa_esol$observer)
 
 temprou$method <- "TSBF"
 tempfin$method <- "TSBF"
 tempsaf$method <- "SAFARI"
-tempesol$method <- "SAFARI"
 
 colnames(temprou)<-c("ID", "taxa", "vegetation", "observer", "method")
 colnames(tempfin)<-c("ID", "taxa", "vegetation", "observer","method")
 colnames(tempsaf)<-c("ID", "taxa", "vegetation", "observer","method")
-colnames(tempesol)<-c("ID", "taxa", "vegetation", "observer","method")
 
-df_soil <- rbind(tempfin, temprou, tempsaf, tempesol)
-
+df_soil <- rbind(tempfin, temprou, tempsaf)
+df_soil<-subset(df_soil, is.na(df_soil$vegetation)!=TRUE)
 
 #########################################################################################
 #########################################################################################
 # try plots ----------------------------------------------------------------------
-# Morphological diversity in TSBF Rouen
-p <- ggplot(tsbf_rou, aes(y=gsmf_taxa, fill=gsmf_taxa))
-p + geom_bar(stat="count")+
-coord_polar("y", start=0)+
-theme_minimal()
+
+
+# Morphological diversity in all
+DF <- ddply(df_soil, .(taxa, vegetation, method), summarise, n=length(taxa))
+
+DF$logn <- log10(DF$n)
+
+p <- ggplot(DF, aes(x=taxa, y=logn, fill=taxa))
+p + geom_bar(stat="identity", width=0.5)+
+coord_polar("x", start=0)+
+theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+facet_wrap(~method*vegetation)
+
+
+
+
 
 # Morphological diversity in TSBF Finlande
 x11()
@@ -276,10 +288,17 @@ safari$observer <- as.factor(safari$observer)
 
 ###################################################################################
 ###################################################################################
-# Créer une variable combinée
+# Create a combined variable
+
 safari$obs_transect <- paste(safari$observer, safari$transect_id, sep = "_")
+safari <- subset(safari, safari$observer!="Pirajeths")
+safari <- subset(safari, safari$observer!="Angelique")
+
+safari <- droplevels(safari)
 # Table de contingence avec la variable combinée
 safcon <- table(safari$obs_transect, safari$taxa)
+
+
 # Working with vegan::decostand --------------------------------------------------
 safcon.hell <- decostand(safcon, method='hellinger')
 
@@ -304,7 +323,7 @@ ggplot(plotobs) +
 
 
 ggplot(plotobs) + 
-  geom_line(aes(x = Sample, y = Species, group = Site, colour = transect_id)) +
+  geom_line(aes(x = Sample, y = Species, group = Site)) +
   facet_wrap(~observer) +
   theme_bw()+
   labs(
@@ -330,8 +349,10 @@ metadata <- data.frame(
 )
 
 # Courbes de raréfaction
+
+
 plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
-                     xlab="Courbe d'accumulation de la diversité de taxas") %>%
+                     xlab="Courbe d'accumulation de la diversité de taxas", na.rm=TRUE) %>%
   left_join(metadata, by = "Site")
 
 #ggplot graph
@@ -340,11 +361,11 @@ x11()
 ggplot(plotobs2) +
   geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
   geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
-  facet_wrap(~transect_id) +
+  facet_wrap(~observer) +
   theme_bw() +
   labs(
     title = "Rarefaction curves from the 'Safari' sampling",
-    subtitle = "1 plot per observer",
+    subtitle = "1 plot per transect id",
     x = "Number of invertebrates sampled",
     y = "Species Richness")
 

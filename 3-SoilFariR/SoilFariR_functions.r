@@ -81,6 +81,7 @@ library(dplyr)
 library(stringr)
 
 gettransect <- function(dataset) {
+    dataset$description<-as.character(dataset$description)
     dataset <- dataset %>%
         mutate(
             transect_id = ifelse(
