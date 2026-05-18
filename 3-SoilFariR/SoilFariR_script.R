@@ -38,6 +38,7 @@ setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
 tsbf_fin <- read.csv2('tsbf_finland2025.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
+tsbf2k26 <- read.csv2('tsbf_2026.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 
 safa_esol <- read.csv2('ESOL-observations.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))  # observations des étudiant.es
 safa_fin <-read.csv2('finland_2025_safari.csv', h=TRUE, stringsAsFactor=, na.strings=c('', 'na'))  # observations de Finlande
@@ -45,6 +46,8 @@ soil <- read.csv2('uptodate_DataFrame.csv', h=TRUE, stringsAsFactor=TRUE, na.str
 
 summary(tsbf_rou)
 summary(tsbf_fin)
+summary(tsbf2k26)
+tsbf2k26 <- tsbf2k26[0:133,]
 summary(soil)
 summary(safa_esol)
 summary(safa_fin)
@@ -146,17 +149,20 @@ tsbf_rou$vegetation="forest"
 
 temprou <- data.frame(tsbf_rou$groupe_tp, tsbf_rou$gsmf_taxa, tsbf_rou$vegetation, tsbf_rou$etudiant)
 tempfin <- data.frame(tsbf_fin$Field_ID, tsbf_fin$gsmf_taxa, tsbf_fin$vegetation, tsbf_fin$observer)
+temp2k26 <- data.frame(tsbf2k26$Field_ID, tsbf2k26$gsmf_taxa, tsbf2k26$vegetation, tsbf2k26$observer)
 tempsaf <- data.frame(safari$transect_id, safari$taxa, safari$vegetation, safari$observer)
 
 temprou$method <- "TSBF"
 tempfin$method <- "TSBF"
+temp2k26$method <- "TSBF"
 tempsaf$method <- "SAFARI"
 
 colnames(temprou)<-c("ID", "taxa", "vegetation", "observer", "method")
 colnames(tempfin)<-c("ID", "taxa", "vegetation", "observer","method")
 colnames(tempsaf)<-c("ID", "taxa", "vegetation", "observer","method")
+colnames(temp2k26)<-c("ID", "taxa", "vegetation", "observer","method")
 
-df_soil <- rbind(tempfin, temprou, tempsaf)
+df_soil <- rbind(tempfin, temprou, tempsaf, temp2k26)
 df_soil<-subset(df_soil, is.na(df_soil$vegetation)!=TRUE)
 
 #########################################################################################
@@ -358,7 +364,7 @@ plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
 #ggplot graph
 
 x11()
-ggplot(plotobs2) +
+ggplot(plotobs2) + 
   geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
   geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
   facet_wrap(~observer) +
