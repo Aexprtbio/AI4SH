@@ -28,12 +28,12 @@ library(RVAideMemoire)
 library(cluster)
 
 # import functions from SoilFariR_functions.r ---------------------------------------
-setwd('D:/GitHub/AI4SH/3-SoilFariR')
+setwd('~/AI4SH/3-SoilFariR')
 source('SoilFariR_functions.r')
 
 
 # import up to date DataFrame -------------------------------------------------------
-setwd('D:/GitHub/AI4SH/4-DataFrames_ready')
+setwd('~/AI4SH/4-DataFrames_ready')
 
 tsbf_rou <- read.csv2('L3EBO_macrofaune.csv', h=TRUE, stringsAsFactor=TRUE, na.strings=c('', 'na'))
 tsbf_env <- read.csv2('L3EBO_environnement.csv', h=TRUE, stringsAsFactor=TRUE, dec='.')
@@ -155,7 +155,7 @@ tempsaf <- data.frame(safari$transect_id, safari$taxa, safari$vegetation, safari
 temprou$method <- "TSBF"
 tempfin$method <- "TSBF"
 temp2k26$method <- "TSBF"
-tempsaf$method <- "SAFARI"
+tempsaf$method <- "SOILFARI"
 
 colnames(temprou)<-c("ID", "taxa", "vegetation", "observer", "method")
 colnames(tempfin)<-c("ID", "taxa", "vegetation", "observer","method")
@@ -246,7 +246,7 @@ soil <- soil %>%
 
 # ON GSMF TAXA -----------------------------------------------------------------------------------
 
-commtt <- table(df_soil$vegetation, df_soil$taxa)
+commtt <- table(safari$vegetation, safari$taxa)
 plotobs <- rarecurve(commtt)
 
 # need to make a count of taxa per sample order and transect id for community matrix --------------
@@ -278,7 +278,7 @@ rarecurve(commucoll3, step=1,
 
 #################################################################################################
 # Whole dataset - method x taxa -----------------------------------------------------------------
-commu <- table(safari$saf_method, safari$taxa)
+commu <- table(df_soil$method, df_soil$taxa)
 rarecurve(commu, step=1)
 
 
@@ -363,7 +363,7 @@ plotobs2 <- rarecurve(obs_trans, step=2, tidy=TRUE,
 
 #ggplot graph
 
-x11()
+
 ggplot(plotobs2) + 
   geom_line(aes(x = Sample, y = Species, group = Site), colour="red") +
   geom_line(data = plotobs, aes(x = Sample, y = Species, group=Site))+
@@ -409,6 +409,8 @@ plotobs <- rarecurve(safcon, step=1, tidy=TRUE,
                      xlab="Courbe d'accumulation de la diversité de taxas") %>%
   left_join(metadata, by = "Site")
 
+
+
 plotobs <- cbind(plotobs, safari$time)
 colnames(plotobs[,6]) <- "time"
 
@@ -425,18 +427,17 @@ ggplot(plotobs, aes(x = safari$time, y = Species, color = transect_id)) +
 
 
 ########################### Vegetation and time ######################################
-# Ok now the same with vegetation
-safari$obs_veg <- paste(safari$observer, safari$vegetation, sep = "_")
+# Ok now the same with vegetation on DF SOIL
+df_soil$met_veg <- paste(df_soil$method, df_soil$vegetation, sep = "_")
 
-safari <- safari[order(safari$time),]
-safari <- safari[order(safari$obs_veg),]
+
 # Table de contingence avec la variable combinée
-safcon <- table(safari$obs_veg, safari$taxa)
+safcon <- table(df_soil$met_veg, df_soil$taxa)
 
 # Metadata avec les informations séparées
 metadata <- data.frame(
   "Site" = rownames(safcon),
-  "observer" = sapply(strsplit(rownames(safcon), "_"), `[`, 1),
+  "method" = sapply(strsplit(rownames(safcon), "_"), `[`, 1),
   "vegetation" = sapply(strsplit(rownames(safcon), "_"), `[`, 2)
 )
 
@@ -444,18 +445,16 @@ plotobs <- rarecurve(safcon, step=1, tidy=TRUE,
                      xlab="Courbe d'accumulation de la diversité de taxas") %>%
   left_join(metadata, by = "Site")
 
-time <- safari$time
-plotobs <- cbind(plotobs, time)
 
-x11()
-ggplot(plotobs, aes(x = time, y = Species, color = observer)) +
+
+ggplot(plotobs, aes(x = Sample, y = Species, color=method)) +
   geom_line(linewidth = 1.2) +
   facet_wrap(~ vegetation) +
   labs(
-    title = "Courbe d'accumulation de la biodiversité",
-    subtitle = "Taxa en fonction du nombre d'individus par jour et observateur",
-    x = "temps en secondes",
-    y = "Richesse spécifique (taxa uniques)") +
+    title = "Taxa accumulation curve per vegetation cover and method",
+    subtitle = "Taxa richness for sample size",
+    x = "Sample Size",
+    y = "Taxa Richness") +
   theme_minimal()
 
 
